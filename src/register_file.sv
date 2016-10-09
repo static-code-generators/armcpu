@@ -38,21 +38,3 @@ module register_file
     end
 
 endmodule
-
-/*
-* A plain old lonely register.
-*/
-module register
-(
-    output reg [31:0] q; // Current value of register
-    input      [31:0] d; // Next value of register to be changed at next positive clock egde
-    input             clk, enable, rst_b;
-    // NB: The reset signal is active low, enable is active high
-);
-    always_ff @(posedge clk or negedge rst_b) begin
-        if (~rst_b)
-            q <= 0;
-        else if (enable)
-            q <= d;
-    end
-endmodule
