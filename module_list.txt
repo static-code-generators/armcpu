@@ -1,0 +1,8 @@
+arm_alu.v
+arm_core.v
+arm_decode.v
+arm_defines.vh
+barrel_shifter.v
+cond_decode.v
+register.v
+register_file.v

@@ -7,11 +7,14 @@ module register
     parameter WIDTH = 32;
 )
 (
-    output reg [WIDTH - 1:0] q; // Current value of register
-    input      [WIDTH - 1:0] d; // Next value of register to be changed at next positive clock egde
+    // inputs
     input                    clk, enable, rst;
+    input      [WIDTH - 1:0] d; // Next value of register to be set at next positive clock edge
+    // outputs
+    output reg [WIDTH - 1:0] q; // Current value of register
 );
-    always_ff @(posedge clk or posedge rst) begin
+    // rst is active high
+    always @(posedge clk or posedge rst) begin
         if (rst)
             q <= 0;
         else if (enable) // Priority of rst > enable

@@ -1,18 +1,21 @@
 `include "arm_defines.vh"
 
+/*
+ * Top-level module for instantiating all other modules.
+ */
 module arm_core
 (
     // Inputs
-    input             clk, rst;
-    input      [31:0] inst;
-    input      [31:0] mem_data_out; // Data from memory load
+    input             clk, rst,
+    input      [31:0] inst,
+    input      [31:0] mem_data_out, // Data from memory load
     // Outputs
-    output reg        halted;
-    output reg [29:0] mem_addr;     // Address of data to load
-    output reg [29:0] inst_addr;    // Address of next instruction to load from memory
+    output reg        halted,
+    output reg [29:0] mem_addr,     // Address of data to load
+    output reg [29:0] inst_addr,    // Address of next instruction to load from memory
     // Load op inputs to memory are 30 bits because lower 2 bits are
-    // implicity zero; address divisible by 4 because word-aligned
-    output reg [31:0] mem_data_in;  // Data for memory store
+    // implicity zero, address divisible by 4 because word-aligned
+    output reg [31:0] mem_data_in   // Data for memory store
 );
 
     // NB: Slight deviation from armsimc here.
@@ -21,7 +24,7 @@ module arm_core
     // register/operand decoding will not take place within
     // instruction execution blocks anymore.
 
-    // Some common encoded chunks
+    // Some common encoded chunks for all instructions
     wire [3:0] dcd_cond, dcd_opcode;
     wire [3:0] dcd_rn, dcd_rd, dcd_rm;
     wire [4:0] dcd_shift_amt;
@@ -47,7 +50,7 @@ module arm_core
     // BRANCH - br
     wire [23:0] dcd_br_offset;
 
-    assign dcd_br_offset = inst[23:0]
+    assign dcd_br_offset = inst[23:0];
     
     // LOAD-STORE - ls
     wire [11:0] dcd_ls_immed;
@@ -70,8 +73,15 @@ module arm_core
     // Need to hook PC up to register file
     wire [31:0] pc;
     assign inst_addr = pc;
+
+    reg [31:0] cpsr;
     
-    arm_decode Decoder
+    arm_decode MainDecoder
+    (
+
+    );
+
+    cond_decode CondDecoder
     (
 
     );
@@ -95,5 +105,9 @@ module arm_core
     (
 
     );
+
+    // Instantiate muxes as required between each module
+    // Mux select lines will have to be appropriately set
+    // by the main decode unit
 
 endmodule
