@@ -13,7 +13,7 @@ $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
 
 # Compile Verilog
-compile: $(BUILDDIR)
+compile: | $(BUILDDIR)
 	$(IV) $(IV_FLAGS) -o $(BUILDDIR)/$(ROOT)
 
 # Assemble ARM Assembly Input
