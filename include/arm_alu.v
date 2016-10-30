@@ -15,6 +15,8 @@ module arm_alu
     /** For v_bit calculation refer to http://teaching.idallen.com/dat2343/10f/notes/040_overflow.txt */
     /* FIXME: Still doesn't take carry bit as input for ADC/SBC/RSC */
     always @ (*) begin
+        c_bit = 1'bx;
+        v_bit = 1'bx;
         case (alu_op_sel)
             `AND, `TST: alu_out          = alu_op1 & alu_op2;
             `EOR, `TEQ: alu_out          = alu_op1 ^ alu_op2;
@@ -22,19 +24,21 @@ module arm_alu
                 begin
                         {c_bit, alu_out} = alu_op1 - alu_op2;
                         v_bit            = (alu_out[31] & alu_op1[31] & ~alu_op2[31])
-                                          | (~alu_out[31] & ~alu_op1[31] & alu_op2[31]);
+                                         | (~alu_out[31] & ~alu_op1[31] & alu_op2[31]);
+                        c_bit            = ~c_bit; // for subtraction, carry = ~borrow in arm
                 end
             `RSB, `RSC:
                 begin
                         {c_bit, alu_out} = alu_op2 - alu_op1;
                         v_bit            = (alu_out[31] & ~alu_op1[31] & alu_op2[31])
-                                          | (~alu_out[31] & alu_op1[31] & ~alu_op2[31]);
+                                         | (~alu_out[31] & alu_op1[31] & ~alu_op2[31]);
+                        c_bit            = ~c_bit;
                 end
             `ADD, `ADC, `CMN:
                 begin
                         {c_bit, alu_out} = alu_op1 + alu_op2;
                         v_bit            = (alu_out[31] & ~alu_op1[31] & ~alu_op2[31])
-                                          | (~alu_out[31] & alu_op1[31] & alu_op2[31]);
+                                         | (~alu_out[31] & alu_op1[31] & alu_op2[31]);
                 end
             `ORR:       alu_out          = alu_op1 | alu_op2;
             `MOV:       alu_out          = alu_op2;
