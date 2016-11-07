@@ -22,16 +22,19 @@ Various muxes will have to be instantiated between each module for selecting ope
 
 Chepo'd from the Telegram message.
 
-Idea of implementing different operations is (mote daag mein of course):
+Idea of **implementing different operations** is (mote daag mein of course):
+
 1. Check if required modules for making the operation work exist in the circuit
 2. If not, instantiate module(s) in top-level module and wire appropriately
 3. If they exist and any input(s) to the module(s) clash with another op (for ex. in `barrel_shifter`, an input could be a register value or an immediate value), you stuff in a mux to appropriately select the input depending on what your op is
 4. Generate control signals for the mux(es) and the ALU in the `arm_decode` module for your op
 
+About **repo maintenance**:
+
 1. Small feature gets assigned to a person after group meeting
 2. The person implements it in a separate branch and then sends PR to master
 3. The PR needs review by maintainer of module within 12hrs, and if okayed by them, can be merged into master
-4. If no reply on PR till 12hrs hours by maintainer, anyone can review it, and if no reply till 24hrs more, it can be merged into master
+4. If no reply on PR till 12hrs hours by maintainer, anyone can review it, and if no reply till 24hrs more, it can be merged into mastersimc
 5. PR should have no merge conflicts, it's responsibility of the PR-sender to keep their branch updated to master
 
 ### Maintainers
