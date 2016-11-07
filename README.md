@@ -20,6 +20,14 @@ Various muxes will have to be instantiated between each module for selecting ope
 
 ### Workflow
 
+Chepo'd from the Telegram message.
+
+Idea of implementing different operations is (mote daag mein of course):
+1. Check if required modules for making the operation work exist in the circuit
+2. If not, instantiate module(s) in top-level module and wire appropriately
+3. If they exist and any input(s) to the module(s) clash with another op (for ex. in `barrel_shifter`, an input could be a register value or an immediate value), you stuff in a mux to appropriately select the input depending on what your op is
+4. Generate control signals for the mux(es) and the ALU in the `arm_decode` module for your op
+
 1. Small feature gets assigned to a person after group meeting
 2. The person implements it in a separate branch and then sends PR to master
 3. The PR needs review by maintainer of module within 12hrs, and if okayed by them, can be merged into master
