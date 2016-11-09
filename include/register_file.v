@@ -11,33 +11,46 @@ module register_file
     // inputs
     input                    clk,
     input                    reset,
-    input                    write_en,
-    input [WORD_SIZE - 1:0]  write_data,
-    input [ADDR_WIDTH - 1:0] write_reg, // size of reg address line is log_2(NUM_REGS)
-    input [ADDR_WIDTH - 1:0] read_reg_1, read_reg_2,
+    // for registers
+    input                    rd_we,
+    input [WORD_SIZE - 1:0]  rd_in,
+    input [ADDR_WIDTH - 1:0] write_rd, // size of reg address line is log_2(NUM_REGS)
+    input [ADDR_WIDTH - 1:0] read_rn, read_rm,
+    // for cpsr and pc
+    input [WORD_SIZE - 1:0]  pc_in, cpsr_in,
+    input                    pc_we, cpsr_we,
     // outputs
-    output [WORD_SIZE - 1:0]  out_data_1, out_data_2,
-    output [WORD_SIZE - 1:0]  pc
+    output [WORD_SIZE - 1:0]  rn_out, rm_out,
+    output [WORD_SIZE - 1:0]  pc_out, cpsr_out
 );
+    // declaring memory elements
     reg [WORD_SIZE - 1:0] registers[NUM_REGS - 1:0];
+    reg [WORD_SIZE - 1:0] cpsr;
+
+    // assigning outputs
+    assign rn_out = registers[read_rn]; 
+    assign rm_out = registers[read_rm];
+    assign pc_out = registers[15];
+    assign cpsr_out = cpsr;
+
     integer i;
 
-    // Read operation is combinatorial (runs asynchronously)
-    // `registers[read_reg_1]` implicitly builds address decoder for
-    // `read_reg_1`; synthesized logic is larger and slower than it needs to be.
-    // TODO: Make explicit address decoder module for better speed and size.
-    assign out_data_1 = registers[read_reg_1]; 
-    assign out_data_2 = registers[read_reg_2];
-    assign pc = registers[15];
-
     // Write operation is sequential (clocked at posedge)
-    always @(posedge clk) begin
+    always @(posedge clk or posedge reset) begin // asynchronous reset
         if (reset) begin
             for (i = 0; i < NUM_REGS; i = i + 1)
                 registers[i] <= 0;
         end
-        else if (write_en) begin
-            registers[write_reg] <= write_data;
+        else begin 
+            if (rd_we) begin
+                registers[write_rd] <= rd_in;
+            end
+            if (pc_we) begin
+                registers[15] <= pc_in;
+            end
+            if (cpsr_we) begin
+                cpsr <= cpsr_in;
+            end
         end
     end
 
