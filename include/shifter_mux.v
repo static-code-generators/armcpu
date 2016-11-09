@@ -1,10 +1,10 @@
 module shifter_mux
 (
-    input  [1:0]  sel,
-    input  [3:0]  rotate_imm,
-    input  [4:0]  shift_imm,
-    input  [31:0] rs,
-    output [31:0] shifter
+    input      [1:0]  sel,
+    input      [3:0]  rotate_imm,
+    input      [4:0]  shift_imm,
+    input      [31:0] rs,
+    output reg [31:0] shifter
 );
 
     always @(*) begin

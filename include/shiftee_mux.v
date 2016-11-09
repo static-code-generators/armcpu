@@ -1,9 +1,9 @@
 module shiftee_mux
 (
-    input         sel,
-    input  [7:0]  immed_8,
-    input  [31:0] rm,
-    output [31:0] shiftee
+    input             sel,
+    input      [7:0]  immed_8,
+    input      [31:0] rm,
+    output reg [31:0] shiftee
 );
 
     always @(*) begin
