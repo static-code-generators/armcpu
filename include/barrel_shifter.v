@@ -26,10 +26,21 @@ module barrel_shifter
 // ASRREG - 0101
 // RORIMM - x110
 // RORREG - 0111
-// Register direct - 00000000
+// IMMED  - 1000
+// Register direct - covered within LSLIMM
+// RXX - covered within RORIMM
 
     always @(*) begin
         case (barrel_sel)
+            IMMED: begin
+                shifter_operand <= ((shiftee << (32 - (shifter << 1))) | (shiftee >> (shifter << 1))); // rotate-right
+                if (shifter == 0) begin
+                    shifter_carry_out <= c_flag;
+                end
+                else begin /* shifter != 0*/
+                    shifter_carry_out <= shifter_operand[31];
+                end
+            end
             LSLIMM: begin
                 if (shifter == 0) begin
                     shifter_operand <= shiftee;
