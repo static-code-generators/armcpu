@@ -40,3 +40,13 @@
 `define MOV 4'b1101
 `define BIC 4'b1110
 `define MVN 4'b1111
+
+/* For BARREL_SEL */
+`define LSLIMM 4'0000
+`define LSLREG 4'0001
+`define LSRIMM 4'0010
+`define LSRREG 4'0011
+`define ASRIMM 4'0100
+`define ASRREG 4'0101
+`define RORIMM 4'0110
+`define RORREG 4'0111
