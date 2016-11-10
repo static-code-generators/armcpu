@@ -12,7 +12,7 @@ module arm_decode
     input      [31:0] inst, // input instruction
     /*---------- Outputs ------------*/
     // Inputs to register file:
-    output reg [3:0]  write_rd, read_rn, read_rm, read_rs,
+    output     [3:0]  write_rd, read_rn, read_rm, read_rs, // this line may change as well if they need to be assigned outputs conditionally
     output reg        rd_we, pc_we, cpsr_we,
     output reg [31:0] rd_in, pc_in, cpsr_in, // this line will probably change
     
@@ -27,8 +27,8 @@ module arm_decode
     output     [3:0]  rotate_imm_shifter_in,
     output     [4:0]  shift_imm_shifter_in,
 
-    output reg [3:0]  alu_sel, // wired to ALU
-    output reg [3:0]  barrel_sel, // wired to barrel_shifter
+    output     [3:0]  alu_sel, // wired to ALU
+    output reg [3:0]  barrel_sel // wired to barrel_shifter
 );
 
     /*----------------- Assigning decoded chunks ------------------*/
@@ -110,21 +110,21 @@ module arm_decode
         if (cond_pass == 1) begin
 
             /*--------------- FOR BARREL SHIFTER -----------------*/
-            case (inst[I_BIT])
+            case (inst[`I_BIT])
                 1'b1: begin /* 32-bit immediate */
-                    shiftee_sel <= IMMED_8_SEL;
-                    shifter_sel <= ROTATE_IMM_SEL;
+                    shiftee_sel <= `IMMED_8_SEL;
+                    shifter_sel <= `ROTATE_IMM_SEL;
                 end
                 1'b0: begin
                     case (inst[4])
                     1'b0: begin /* immediate shifts */
-                        shiftee_sel <= RM_SEL;
-                        shifter_sel <= SHIFT_IMM_SEL;
+                        shiftee_sel <= `RM_SEL;
+                        shifter_sel <= `SHIFT_IMM_SEL;
                     end
                     1'b1: begin /* register shifts */
                         if (inst[7] == 0) begin
-                            shiftee_sel <= RM_SEL;
-                            shifter_sel <= RS_SEL;
+                            shiftee_sel <= `RM_SEL;
+                            shifter_sel <= `RS_SEL;
                         end
                     end
                     endcase
@@ -134,10 +134,10 @@ module arm_decode
 
             /*--------------- OP-SPECIFIC DECODING -------------*/
 
-            case (dcd_opcode)
+            //case (dcd_opcode)
 
                 
-            endcase
+            //endcase
 
             /*--------------- END OP-SPECIFIC DECODING -------------*/
 
