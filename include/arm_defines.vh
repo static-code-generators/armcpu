@@ -62,7 +62,7 @@
 `define RS_SEL         2'b10
 
 /* For COND_DECODE */
-`define N_BIT 31
-`define Z_BIT 30
-`define C_BIT 29
-`define V_BIT 28
+`define CPSR_N 31
+`define CPSR_Z 30
+`define CPSR_C 29
+`define CPSR_V 28

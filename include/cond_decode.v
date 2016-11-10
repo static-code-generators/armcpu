@@ -14,20 +14,20 @@ module cond_decode
 
     always @ (inst) begin
         case(cond)
-            `EQ : valid <=  cpsr[`Z_BIT];
-            `NE : valid <= ~cpsr[`Z_BIT];
-            `CS : valid <=  cpsr[`C_BIT]; 
-            `CC : valid <= ~cpsr[`C_BIT];
-            `MI : valid <=  cpsr[`N_BIT];
-            `PL : valid <= ~cpsr[`N_BIT];
-            `VS : valid <=  cpsr[`V_BIT];
-            `VC : valid <= ~cpsr[`V_BIT];
-            `HI : valid <= (cpsr[`C_BIT]) && (~cpsr[`Z_BIT]);
-            `LS : valid <= (~cpsr[`C_BIT]) || (cpsr[`Z_BIT]);
-            `GE : valid <= ((cpsr[`N_BIT]) && (cpsr[`V_BIT])) || ((~cpsr[`N_BIT]) && (~cpsr[`V_BIT]));
-            `LT : valid <= ((~cpsr[`N_BIT]) && (cpsr[`V_BIT])) || ((cpsr[`N_BIT]) && (~cpsr[`V_BIT]));
-            `GT : valid <= (~cpsr[`Z_BIT]) && (((cpsr[`N_BIT]) && (cpsr[`V_BIT])) || ((~cpsr[`N_BIT]) && (~cpsr[`V_BIT])));
-            `LE : valid <= (cpsr[`Z_BIT]) && (((~cpsr[`N_BIT]) && (cpsr[`V_BIT])) || ((cpsr[`N_BIT]) && (~cpsr[`V_BIT])));
+            `EQ : valid <=  cpsr[`CPSR_Z];
+            `NE : valid <= ~cpsr[`CPSR_Z];
+            `CS : valid <=  cpsr[`CPSR_C]; 
+            `CC : valid <= ~cpsr[`CPSR_C];
+            `MI : valid <=  cpsr[`CPSR_N];
+            `PL : valid <= ~cpsr[`CPSR_N];
+            `VS : valid <=  cpsr[`CPSR_V];
+            `VC : valid <= ~cpsr[`CPSR_V];
+            `HI : valid <= (cpsr[`CPSR_C]) && (~cpsr[`CPSR_Z]);
+            `LS : valid <= (~cpsr[`CPSR_C]) || (cpsr[`CPSR_Z]);
+            `GE : valid <= ((cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((~cpsr[`CPSR_N]) && (~cpsr[`CPSR_V]));
+            `LT : valid <= ((~cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((cpsr[`CPSR_N]) && (~cpsr[`CPSR_V]));
+            `GT : valid <= (~cpsr[`CPSR_Z]) && (((cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((~cpsr[`CPSR_N]) && (~cpsr[`CPSR_V])));
+            `LE : valid <= (cpsr[`CPSR_Z]) && (((~cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((cpsr[`CPSR_N]) && (~cpsr[`CPSR_V])));
             `AL : valid <= 1'b1;
             default : valid <= 1'b0;
         endcase
