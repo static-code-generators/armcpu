@@ -42,15 +42,15 @@
 `define MVN 4'b1111
 
 /* For BARREL_SEL */
-`define LSLIMM 4'0000
-`define LSLREG 4'0001
-`define LSRIMM 4'0010
-`define LSRREG 4'0011
-`define ASRIMM 4'0100
-`define ASRREG 4'0101
-`define RORIMM 4'0110
-`define RORREG 4'0111
-`define IMMED  4'1000
+`define LSLIMM 4'b0000
+`define LSLREG 4'b0001
+`define LSRIMM 4'b0010
+`define LSRREG 4'b0011
+`define ASRIMM 4'b0100
+`define ASRREG 4'b0101
+`define RORIMM 4'b0110
+`define RORREG 4'b0111
+`define IMMED  4'b1000
 
 /* For SHIFTEE_SEL */
 `define IMMED_8_SEL 1'b0

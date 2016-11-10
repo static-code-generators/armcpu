@@ -32,7 +32,7 @@ module barrel_shifter
 
     always @(*) begin
         case (barrel_sel)
-            IMMED: begin
+            `IMMED: begin
                 shifter_operand <= ((shiftee << (32 - (shifter << 1))) | (shiftee >> (shifter << 1))); // rotate-right
                 if (shifter == 0) begin
                     shifter_carry_out <= c_flag;
@@ -41,7 +41,7 @@ module barrel_shifter
                     shifter_carry_out <= shifter_operand[31];
                 end
             end
-            LSLIMM: begin
+            `LSLIMM: begin
                 if (shifter == 0) begin
                     shifter_operand <= shiftee;
                     shifter_carry_out <= c_flag;
@@ -51,7 +51,7 @@ module barrel_shifter
                     shifter_carry_out <= shiftee[32 - shifter];
                 end
             end
-            LSLREG: begin
+            `LSLREG: begin
                 if (shifter[7:0] == 0) begin
                     shifter_operand <= shiftee;
                     shifter_carry_out <= c_flag;
@@ -69,7 +69,7 @@ module barrel_shifter
                    shifter_carry_out <= 0;
                 end
             end
-            LSRIMM: begin
+            `LSRIMM: begin
                 if (shifter == 0) begin
                     shifter_operand <= 0;
                     shifter_carry_out <= shiftee[31];
@@ -79,7 +79,7 @@ module barrel_shifter
                     shifter_carry_out <= shiftee[shifter - 1];
                 end
             end
-            LSRREG: begin
+            `LSRREG: begin
                 if (shifter[7:0] == 0) begin
                     shifter_operand <= shiftee;
                     shifter_carry_out <= c_flag;
@@ -97,7 +97,7 @@ module barrel_shifter
                    shifter_carry_out <= 0;
                 end
             end
-            ASRIMM: begin
+            `ASRIMM: begin
                 if (shifter == 0) begin
                     if (shiftee[31] == 0) begin
                         shifter_operand <= 0;
@@ -113,7 +113,7 @@ module barrel_shifter
                     shifter_carry_out <= shiftee[shifter - 1];
                 end
             end
-            ASRREG: begin
+            `ASRREG: begin
                 if (shifter[7:0] == 0) begin
                     shifter_operand <= shiftee;
                     shifter_carry_out <= c_flag;
@@ -137,7 +137,7 @@ module barrel_shifter
                     end
                 end
             end
-            RORIMM: begin
+            `RORIMM: begin
                 if (shifter == 0) begin // RRX
                     shifter_operand <= ((c_flag << 31) | (shiftee >> 1));
                     shifter_carry_out <= shiftee[0];
@@ -147,7 +147,7 @@ module barrel_shifter
                     shifter_carry_out <= shiftee[shifter - 1];
                 end
             end
-            RORREG: begin
+            `RORREG: begin
                 if (shifter[7:0] == 0) begin
                     shifter_operand <= shiftee;
                     shifter_carry_out <= c_flag;
