@@ -37,7 +37,7 @@ module barrel_shifter
                 if (shifter == 0) begin
                     shifter_carry_out <= c_flag;
                 end
-                else begin /* shifter != 0*/
+                else begin /* shifter != 0 */
                     shifter_carry_out <= shifter_operand[31];
                 end
             end
