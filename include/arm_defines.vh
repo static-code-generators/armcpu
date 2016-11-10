@@ -61,7 +61,7 @@
 `define SHIFT_IMM_SEL  2'b01
 `define RS_SEL         2'b10
 
-/* For COND_DECODE */
+/* For CPSR */
 `define CPSR_N 31
 `define CPSR_Z 30
 `define CPSR_C 29
