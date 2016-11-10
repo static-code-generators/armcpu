@@ -44,12 +44,12 @@ module barrel_shifter
             LSLIMM: begin
                 if (shifter == 0) begin
                     shifter_operand <= shiftee;
-                    shifter_carry_out <= c_flag
+                    shifter_carry_out <= c_flag;
                 end
                 else begin
                     shifter_operand <= shiftee << shifter;
                     shifter_carry_out <= shiftee[32 - shifter];
-                begin
+                end
             end
             LSLREG: begin
                 if (shifter[7:0] == 0) begin
@@ -77,7 +77,7 @@ module barrel_shifter
                 else begin /* shifter > 0 */
                     shifter_operand <= shiftee >> shifter;
                     shifter_carry_out <= shiftee[shifter - 1];
-                begin
+                end
             end
             LSRREG: begin
                 if (shifter[7:0] == 0) begin
@@ -111,7 +111,7 @@ module barrel_shifter
                 else begin /* shifter > 0 */
                     shifter_operand <= shiftee >>> shifter;
                     shifter_carry_out <= shiftee[shifter - 1];
-                begin
+                end
             end
             ASRREG: begin
                 if (shifter[7:0] == 0) begin
@@ -119,7 +119,7 @@ module barrel_shifter
                     shifter_carry_out <= c_flag;
                 end
                 else if (shifter[7:0] < 32) begin
-                    shifter_operand <= shiftee >>> shifter[7:0];
+                    shifter_operand <= (shiftee >>> shifter[7:0]);
                     shifter_carry_out <= shiftee[shifter[7:0] - 1];
                 end
                 else if (shifter[7:0] == 32) begin
