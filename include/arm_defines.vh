@@ -50,3 +50,13 @@
 `define ASRREG 4'0101
 `define RORIMM 4'0110
 `define RORREG 4'0111
+`define IMMED  4'1000
+
+/* For SHIFTEE_SEL */
+`define IMMED_8_SEL 1'b0
+`define RM_SEL      1'b1
+
+/* For SHIFTER_SEL */
+`define ROTATE_IMM_SEL 2'b00
+`define SHIFT_IMM_SEL  2'b01
+`define RS_SEL         2'b10

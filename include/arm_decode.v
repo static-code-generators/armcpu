@@ -9,16 +9,20 @@
 module arm_decode
 (
     input      [31:0] inst, // input instruction
-    // outputs
+    /*---------- Outputs ------------*/
     // Inputs to register file:
     output reg [3:0]  write_rd, read_rn, read_rm, read_rs,
     output reg        rd_we, pc_we, cpsr_we,
     output reg [31:0] rd_in, pc_in, cpsr_in, // this line will probably change
     
     // Control signals for various modules
-    output reg [3:0]  alu_sel, // wired to ALU
+    // Inputs to shiftee_mux:
     output reg        shiftee_sel, // wired to shiftee_mux
+
+    // Inputs to shifter_mux:
     output reg [1:0]  shifter_sel, // wired to shifter_mux
+
+    output reg [3:0]  alu_sel, // wired to ALU
     output reg [3:0]  barrel_sel, // wired to barrel_shifter
 );
 
@@ -61,5 +65,46 @@ module arm_decode
     // No more decoded chunks required
 
     /*---------------------------------------------------*/
+
+    always @(*) begin
+
+        /*--------------- FOR BARREL_SEL -----------------*/
+        case (inst[I_BIT])
+            1'b1: begin /* 32-bit immediate */
+                shiftee_sel <= IMMED_8_SEL;
+                shifter_sel <= ROTATE_IMM_SEL;
+            end
+            1'b0: begin
+                case (inst[4])
+                1'b0: begin /* immediate shifts */
+                    shiftee_sel <= RM_SEL;
+                    shifter_sel <= SHIFT_IMM_SEL;
+                end
+                1'b1: begin /* register shifts */
+                    if (inst[7] == 0) begin
+                        shiftee_sel <= RM_SEL;
+                        shifter_sel <= RS_SEL;
+                    end
+                end
+                endcase
+            end
+        endcase
+        /*--------------- END BARREL_SEL -----------------*/
+
+        /*--------------- FOR ALU_SEL -----------------*/
+
+
+        /*--------------- END ALU_SEL -----------------*/
+
+        /*--------------- OP-SPECIFIC DECODING -------------*/
+
+        case (dcd_opcode)
+
+            
+        endcase
+
+        /*--------------- END OP-SPECIFIC DECODING -------------*/
+
+    end
 
 endmodule
