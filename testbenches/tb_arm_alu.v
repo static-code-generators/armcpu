@@ -16,6 +16,11 @@ module tb_arm_alu;
         #2 alu_op_sel = `ORR;
         #2 alu_op_sel = `ADD;
         #2 alu_op_sel = `BIC;
+        alu_op1 = 32'hffffffff;
+        alu_op2 = 2;
+        #2 alu_op_sel = `ADD;
+        #2 cpsr_prev = cpsr_next;
+        #2 alu_op_sel = `ADC;
         #2 $finish;
     end
 
