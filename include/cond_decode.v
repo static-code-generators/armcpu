@@ -27,7 +27,7 @@ module cond_decode
             `GE : valid <= ((cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((~cpsr[`CPSR_N]) && (~cpsr[`CPSR_V]));
             `LT : valid <= ((~cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((cpsr[`CPSR_N]) && (~cpsr[`CPSR_V]));
             `GT : valid <= (~cpsr[`CPSR_Z]) && (((cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((~cpsr[`CPSR_N]) && (~cpsr[`CPSR_V])));
-            `LE : valid <= (cpsr[`CPSR_Z]) && (((~cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((cpsr[`CPSR_N]) && (~cpsr[`CPSR_V])));
+            `LE : valid <= (cpsr[`CPSR_Z]) || (((~cpsr[`CPSR_N]) && (cpsr[`CPSR_V])) || ((cpsr[`CPSR_N]) && (~cpsr[`CPSR_V])));
             `AL : valid <= 1'b1;
             default : valid <= 1'b0;
         endcase
