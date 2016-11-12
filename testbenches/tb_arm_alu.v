@@ -9,6 +9,7 @@ module tb_arm_alu;
         cpsr_prev = 32'b0;
         alu_op1 = 32;
         alu_op2 = 96;
+
         alu_op_sel = `AND;
         #2 alu_op_sel = `EOR;
         #2 alu_op_sel = `SUB;
@@ -16,11 +17,19 @@ module tb_arm_alu;
         #2 alu_op_sel = `ORR;
         #2 alu_op_sel = `ADD;
         #2 alu_op_sel = `BIC;
-        alu_op1 = 32'hffffffff;
+
+        /* check if carry_bit is used in ADC */
+        #2 alu_op1 = 32'hffffffff;
         alu_op2 = 2;
-        #2 alu_op_sel = `ADD;
+        alu_op_sel = `ADD;
         #2 cpsr_prev = cpsr_next;
-        #2 alu_op_sel = `ADC;
+        alu_op_sel = `ADC;
+
+        /* check if overflow bit is working correctly */
+        #2 alu_op1 = 32'h7fffffff;
+        alu_op2 = 2;
+        alu_op_sel = `ADD;
+
         #2 $finish;
     end
 
