@@ -17,10 +17,10 @@ module arm_memory
     // Inputs
     input clk, rst,
     // Two-port memory
-    input [29:0] addr1,
-    input [29:0] addr2,
+    input [31:0] addr1,
+    input [31:0] addr2,
     input [31:0] data_in1,
-    input [32:0] data_in2,
+    input [31:0] data_in2,
     input write1,
     input write2,
     // Outputs
@@ -121,12 +121,12 @@ module arm_memory
 
     function [31:0] CALC_OFFSET
     (
-        input [31:0] addr
+        input [29:0] addr
     );
         if ((addr >= data_start) && (addr < data_top))
             CALC_OFFSET = addr - data_start;
         else if ((addr >= text_start) && (addr < text_top))
-            CALC_OFFSET = addr - data_start;
+            CALC_OFFSET = addr - text_start;
         else
             CALC_OFFSET = 32'bx;
     endfunction
