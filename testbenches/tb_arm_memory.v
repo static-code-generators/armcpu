@@ -20,6 +20,7 @@ module tb_arm_memory;
         $monitor("time %d, addr: %x, data: %x, excpt: %b, we: %b",
             $time, addr[0], data_out[0], excpt[0], we[0]);
         #5 
+
         // Write to memory
         addr[0] = 32'h00000000;
         data_in[0] = 1;
@@ -28,6 +29,7 @@ module tb_arm_memory;
         // Read from memory
         we[0] = 0;
         #5 
+
         // Write to memory
         addr[0] = 32'h00000010;
         data_in[0] = 32'h1f1e003b;
@@ -36,8 +38,27 @@ module tb_arm_memory;
         // Read from memory address 0x10
         we[0] = 0;
         #5
+
+        // Write to data memory
+        addr[0] = 32'h10000000;
+        data_in[0] = 32'h69;
+        we[0] = 1;
+        #5
+        // Read from data memory
+        we[0] = 0;
+        #5 
+
         // Read from memory address 0x00
         addr[0] = 32'h00000000;
+        #5
+
+        // invalid write
+        addr[0] = 32'h01000000;
+        data_in[0] = 32'h42;
+        we[0] = 1;
+        #5
+        // Read from invalid memory
+        we[0] = 0;
         #5
         $finish;
     end
