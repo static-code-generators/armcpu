@@ -1,4 +1,4 @@
-`include "arm_defines.vh"
+//`include "arm_defines.vh"
 
 module barrel_shifter
 (
@@ -18,6 +18,7 @@ module barrel_shifter
 // extend them to 32 bits.
 // Refer to `assets/shitty_datapath.jpg` for a tentative circuit diagram.
 
+// IMMED  - 1000
 // LSLIMM - x000
 // LSLREG - 0001
 // LSRIMM - x010
@@ -26,7 +27,6 @@ module barrel_shifter
 // ASRREG - 0101
 // RORIMM - x110
 // RORREG - 0111
-// IMMED  - 1000
 // Register direct - covered within LSLIMM
 // RXX - covered within RORIMM
 
