@@ -1,42 +1,43 @@
 module tb_arm_memory;
-    reg clk, rst, write1, write2;
-    reg [31:0] addr1;
-    reg [31:0] addr2;
-    reg [31:0] data_in1;
-    reg [31:0] data_in2;
+    reg clk;
+    reg [0:1] we;
+    reg [0:1][31:0] addr;
+    reg [0:1][31:0] data_in;
 
-    wire excpt;
-    wire [31:0] data_out1;
-    wire [31:0] data_out2;
+    wire [0:1] excpt;
+    wire [0:1][31:0] data_out;
 
-    arm_memory uut(clk, rst, addr1, addr2, data_in1, data_in2, write1, write2,
-                   excpt, data_out1, data_out2);
+    arm_memory uut(clk, addr, data_in, we, excpt, data_out);
 
     always #1 clk = ~clk;
 
     initial begin
         clk = 0;
-        rst = 0;
-        write1 = 0;
-        write2 = 0;
-        data_in1 = 0;
-        data_in2 = 0;
-        $monitor("time %d, addr1: %x, data1: %x, data2: %x, excpt: %b, write1: %b",
-            $time, addr1, data_out1, data_out2, excpt, write1);
+        we[0] = 0;
+        we[1] = 0;
+        data_in[0] = 0;
+        data_in[1] = 0;
+        $monitor("time %d, addr: %x, data: %x, excpt: %b, we: %b",
+            $time, addr[0], data_out[0], excpt[0], we[0]);
         #5 
-        addr1 = 32'h00000000;
-        data_in1 = 1;
-        write1 = 1;
+        // Write to memory
+        addr[0] = 32'h00000000;
+        data_in[0] = 1;
+        we[0] = 1;
         #5
-        write1 = 0;  
+        // Read from memory
+        we[0] = 0;
         #5 
-        addr1 = 32'h00000004;
-        data_in1 = 25;
-        write1 = 1;
+        // Write to memory
+        addr[0] = 32'h00000010;
+        data_in[0] = 32'h1f1e003b;
+        we[0] = 1;
         #5
-        write1 = 0; 
+        // Read from memory address 0x10
+        we[0] = 0;
         #5
-        addr1 = 32'h00000000;
+        // Read from memory address 0x00
+        addr[0] = 32'h00000000;
         #5
         $finish;
     end
