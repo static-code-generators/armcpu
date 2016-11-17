@@ -15,6 +15,8 @@ module tb_register_file;
     wire [`WORD_SIZE - 1:0] pc_out, cpsr_out;
     integer i;
 
+    reg ok = 1; //is it ok for rn_out to change.
+
     initial begin
         clk = 0;
         reset = 1;
@@ -38,11 +40,28 @@ module tb_register_file;
             write_rd = i;
         end
 
-        #2 $finish;
+        #5;
+        $display("all ok, I think");
+        $finish;
     end
 
     always begin
         #1 clk = clk ^ 1;
+    end
+
+    always @(read_rn) begin
+        ok = 1;
+        #1 ok = 0;
+    end
+
+    always @(rn_out) begin
+        if (ok) begin
+            ok = 0;
+        end
+        else if (clk == 0) begin
+            $display("bad bad | rn_out: %d, changed when clk: %b", rn_out, clk);
+            $stop;
+        end
     end
 
     initial begin
