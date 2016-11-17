@@ -1,8 +1,10 @@
-arm_alu.v
 arm_core.v
-arm_decode.v
-arm_defines.vh
-barrel_shifter.v
-cond_decode.v
-register.v
-register_file.v
+include/arm_alu.v
+include/arm_decode.v
+include/arm_defines.vh
+include/barrel_shifter.v
+include/cond_decode.v
+include/register.v
+include/register_file.v
+include/shiftee_mux.v
+include/shifter_mux.v

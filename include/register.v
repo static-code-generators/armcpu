@@ -3,15 +3,15 @@
 * Do we need it? We do not know.
 */
 module register
-(
-    parameter WIDTH = 32;
+#(
+    parameter WIDTH = 32
 )
 (
     // inputs
-    input                    clk, enable, rst;
-    input      [WIDTH - 1:0] d; // Next value of register to be set at next positive clock edge
+    input                    clk, enable, rst,
+    input      [WIDTH - 1:0] d, // Next value of register to be set at next positive clock edge
     // outputs
-    output reg [WIDTH - 1:0] q; // Current value of register
+    output reg [WIDTH - 1:0] q // Current value of register
 );
     // rst is active high
     always @(posedge clk or posedge rst) begin
