@@ -17,11 +17,10 @@ module arm_core
 );
 
     // For register_file:
-    wire [31:0] cpsr_out;
     wire        rd_we;
-    wire        rd_in;
-    wire [31:0] write_rd;
-    wire [31:0] read_rn, read_rm, read_rs;
+    wire [31:0] rd_in;
+    wire [3:0]  write_rd;
+    wire [3:0]  read_rn, read_rm, read_rs;
     wire [31:0] pc_in, cpsr_in;
     wire        pc_we, cpsr_we;
     wire [31:0] rn_out, rm_out, rs_out;
@@ -84,7 +83,7 @@ module arm_core
     (
         // Inputs
         .sel(shiftee_sel),
-        .immed_8(immed_8_shiftee_in),
+        .immed_8(immed_8),
         .rm(rm_out),
         // Output
         .shiftee(shiftee)
@@ -94,8 +93,8 @@ module arm_core
     (
         // Inputs
         .sel(shifter_sel),
-        .rotate_imm(rotate_imm_shifter_in),
-        .shift_imm(shift_imm_shifter_in),
+        .rotate_imm(rotate_imm),
+        .shift_imm(shift_imm),
         .rs(rs_out),
         // Output
         .shifter(shifter)
@@ -104,7 +103,7 @@ module arm_core
     barrel_shifter Shifter
     (
         // Inputs
-        .c_flag(cpsr_out[`C_BIT]),
+        .c_flag(cpsr_out[`CPSR_C]),
         .barrel_sel(barrel_sel),
         .shiftee(shiftee),
         .shifter(shifter),
