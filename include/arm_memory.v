@@ -55,16 +55,16 @@ module arm_memory
         for (i = 0; i < 2; i = i + 1) begin
             if (we[i] && !excpt[i]) begin
                 if (region_sel[i] == `MEM_DATA) begin
-                    data_region[offset[i] + 0] = (data_in[i] >> 24) & 8'hFF; 
-                    data_region[offset[i] + 1] = (data_in[i] >> 16) & 8'hFF; 
-                    data_region[offset[i] + 2] = (data_in[i] >>  8) & 8'hFF; 
-                    data_region[offset[i] + 3] = (data_in[i] >>  0) & 8'hFF; 
+                    data_region[offset[i] + 0] <= (data_in[i] >> 24) & 8'hFF; 
+                    data_region[offset[i] + 1] <= (data_in[i] >> 16) & 8'hFF; 
+                    data_region[offset[i] + 2] <= (data_in[i] >>  8) & 8'hFF; 
+                    data_region[offset[i] + 3] <= (data_in[i] >>  0) & 8'hFF; 
                 end
                 else begin
-                    text_region[offset[i] + 0] = (data_in[i] >> 24) & 8'hFF; 
-                    text_region[offset[i] + 1] = (data_in[i] >> 16) & 8'hFF; 
-                    text_region[offset[i] + 2] = (data_in[i] >>  8) & 8'hFF; 
-                    text_region[offset[i] + 3] = (data_in[i] >>  0) & 8'hFF; 
+                    text_region[offset[i] + 0] <= (data_in[i] >> 24) & 8'hFF; 
+                    text_region[offset[i] + 1] <= (data_in[i] >> 16) & 8'hFF; 
+                    text_region[offset[i] + 2] <= (data_in[i] >>  8) & 8'hFF; 
+                    text_region[offset[i] + 3] <= (data_in[i] >>  0) & 8'hFF; 
                 end
             end
         end
