@@ -36,6 +36,29 @@ module tb_shifter_mux;
 		#5;
 		$finish;
 	end
+	
+	always @ (sel, rotate_imm, shift_imm, rs, shifter) begin
+		case (sel)
+			2'b00: begin
+				if (shifter != {{28{rotate_imm[3]}}, rotate_imm}) begin
+					$display("bad bad | sel: %b, rotate_imm: %b, shifter: %b",
+						sel, rotate_imm, shifter);
+				end
+			end
+			2'b01: begin
+				if (shifter != {{27{shift_imm[4]}}, shift_imm}) begin
+					$display("bad bad | sel: %b, shift_imm: %b, shifter: %b",
+						sel, shift_imm, shifter);
+				end
+			end
+			2'b10: begin
+				if (shifter != rs) begin
+					$display("bad bad | sel: %b, rs: %d, shifter: %d",
+						sel, rs, shifter);
+				end
+			end
+		endcase
+	end
 
 	initial begin
 		$monitor("sel: %b, rotate_imm: %b, shift_imm: %b, rs: %b, shifter %b",
