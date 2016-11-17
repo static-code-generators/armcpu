@@ -1,5 +1,3 @@
-`include "arm_defines.vh"
-
 /*
  * Top-level module for instantiating all other modules.
  */
@@ -18,94 +16,102 @@ module arm_core
     output reg [31:0] mem_data_in   // Data for memory store
 );
 
-    // NB: Slight deviation from armsimc here.
-    // We need to instantiate all wires for all instruction
-    // formats possible within the top module only, so individual
-    // register/operand decoding will not take place within
-    // instruction execution blocks anymore.
-
-    // Some common encoded chunks for all instructions
-    wire [3:0] dcd_cond, dcd_opcode;
-    wire [3:0] dcd_rn, dcd_rd, dcd_rm;
-    wire [4:0] dcd_shift_amt;
-    wire [1:0] dcd_shift;
-
-    assign dcd_cond = inst[31:28];
-    assign dcd_opcode = inst[24:21];
-    assign dcd_rn = inst[19:16];
-    assign dcd_rd = inst[15:12];
-    assign dcd_rm = inst[3:0];
-    assign dcd_shift_amt = inst[11:7];
-    assign dcd_shift = inst[6:5];
-
-    // DATA PROCESSING - dp
-    wire [3:0] dcd_dp_rotate;
-    wire [3:0] dcd_dp_rs;
-    wire [7:0] dcd_dp_immed;
-
-    assign dcd_dp_rotate = inst[11:8];
-    assign dcd_dp_rs = inst[11:8];
-    assign dcd_dp_immed = inst[7:0];
-
-    // BRANCH - br
-    wire [23:0] dcd_br_offset;
-
-    assign dcd_br_offset = inst[23:0];
-    
-    // LOAD-STORE - ls
-    wire [11:0] dcd_ls_immed;
-    
-    assign dcd_ls_immed = inst[11:0];
-
-    // MULTIPLY - mul
-    wire [3:0] dcd_mul_rd, dcd_mul_rn, dcd_mul_rs, dcd_mul_rm; // rn is used only in MLA inst
-
-    assign dcd_mul_rd = inst[19:16];
-    assign dcd_mul_rn = inst[15:12];
-    assign dcd_mul_rs = inst[11:8];
-    assign dcd_mul_rm = inst[3:0];
-
-    // SWI - swi
-    wire [23:0] dcd_swi_number;
-
-    assign dcd_swi_number = inst[23:0];
-
-    // Need to hook PC up to register file
-    wire [31:0] pc;
-    assign inst_addr = pc;
-
-    reg [31:0] cpsr;
-    
-    arm_decode MainDecoder
-    (
-
-    );
-
     cond_decode CondDecoder
     (
-
+        .inst(inst),
+        .cpsr(cpsr_out),
+        .valid(cond_pass)
     );
 
     register_file Register
     (
+        // Inputs
+        .clk(clk),
+        .reset(rst),
+        .rd_we(rd_we),
+        .write_rd(write_rd),
+        .read_rn(read_rn),
+        .read_rm(read_rm),
+        .pc_in(pc_in),
+        .cpsr_in(cpsr_in),
+        .pc_we(pc_we),
+        // Outputs
+        .rn_out(rn_out),
+        .rm_out(rm_out),
+        .pc_out(pc_out),
+        .cpsr_out(cpsr_out)
+    );
 
+ 
+    arm_decode ControlDecodeUnit
+    (
+        // Inputs
+        .cond_pass(cond_pass),
+        .inst(inst),
+        // Outputs
+        .write_rd(write_rd),
+        .read_rn(read_rn),
+        .read_rm(read_rm),
+        .rd_we(rd_we),
+        .pc_we(pc_we),
+        .cpsr_we(cpsr_we),
+        .rd_in(rd_in),
+        .pc_in(pc_in),
+        .cpsr_in(cpsr_in),
+        .shiftee_sel(shiftee_sel),
+        .immed_8_shiftee_in(immed_8),
+        .shifter_sel(shifter_sel),
+        .rotate_imm_shifter_in(rotate_imm),
+        .shift_imm_shifter_in(shift_imm),
+        .alu_sel(alu_sel),
+        .barrel_sel(barrel_sel)
     );
 
     arm_alu alu
     (
+        // Outputs
+        .alu_out(alu_out),
+        .cpsr_next(cpsr_in),
+        // Inputs
+        .alu_op1(rn_out),
+        .alu_op2(shifter_operand),
+        .alu_op_sel(alu_sel),
+        .cpsr_prev(cpsr_out)
+    );
 
+    barrel_shifter Shifter
+    (
+        // Inputs
+        .c_flag(cpsr_out[`C_BIT]),
+        .barrel_sel(barrel_sel),
+        .shiftee(shiftee),
+        .shifter(shifter),
+        // Outputs
+        .shifter_operand(shifter_operand),
+        .shifter_carry_out(shifter_carry_out)
+    );
+
+    shiftee_mux ShifteeMux
+    (
+        .sel(shiftee_sel),
+        .immed_8(immed_8_shiftee_in),
+        .rm(rm_out),
+        .shiftee(shiftee)
+    );
+
+    shifter_mux ShifterMux
+    (
+        .sel(shifter_sel),
+        .rotate_imm(rotate_imm_shifter_in),
+        .shift_imm(shift_imm_shifter_in),
+        .rs(rs_out),
+        .shifter(shifter)
     );
 
     arm_mac mac
     (
 
     );
-
-    barrel_shifter Shifter
-    (
-
-    );
-
     // Instantiate muxes as required between each module
     // Mux select lines will have to be appropriately set
     // by the main decode unit

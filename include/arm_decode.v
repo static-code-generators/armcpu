@@ -1,5 +1,3 @@
-`include "arm_defines.vh"
-
 /*
  * Main instruction decoder module
  * Passes control signals to ALU, MAC, multiple multiplexers, etc.
