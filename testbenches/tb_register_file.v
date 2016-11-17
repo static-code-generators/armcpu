@@ -13,6 +13,7 @@ module tb_register_file;
 	
 	wire [`WORD_SIZE - 1:0] rn_out, rm_out;
 	wire [`WORD_SIZE - 1:0] pc_out, cpsr_out;
+	integer i;
 
 	initial begin
 		clk = 0;
@@ -30,12 +31,13 @@ module tb_register_file;
 		#2 reset = 0;
 		#2 rd_we = 1;
 		#2 rd_in = 42;
+
 		for (i = 0; i < `NUM_REGS; i = i + 1) begin
-			read_rn = i //we aren't reading rm for now.
+			read_rn = i; //we aren't reading rm for now.
 			#2 write_rd = i;
 		end
 
-		#2 $finish
+		#2 $finish;
 	end
 
 	always begin
