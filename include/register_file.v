@@ -15,12 +15,12 @@ module register_file
     input                    rd_we,
     input [WORD_SIZE - 1:0]  rd_in,
     input [ADDR_WIDTH - 1:0] write_rd, // size of reg address line is log_2(NUM_REGS)
-    input [ADDR_WIDTH - 1:0] read_rn, read_rm,
+    input [ADDR_WIDTH - 1:0] read_rn, read_rm, read_rs,
     // for cpsr and pc
     input [WORD_SIZE - 1:0]  pc_in, cpsr_in,
     input                    pc_we, cpsr_we,
     // outputs
-    output [WORD_SIZE - 1:0]  rn_out, rm_out,
+    output [WORD_SIZE - 1:0]  rn_out, rm_out, rs_out,
     output [WORD_SIZE - 1:0]  pc_out, cpsr_out
 );
     // declaring memory elements
