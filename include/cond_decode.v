@@ -1,5 +1,3 @@
-`include "arm_defines.vh"
-
 /*
  * Outputs valid signal depending on current status of CPSR
  */

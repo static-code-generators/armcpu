@@ -16,12 +16,39 @@ module arm_core
     output reg [31:0] mem_data_in   // Data for memory store
 );
 
-    cond_decode CondDecoder
-    (
-        .inst(inst),
-        .cpsr(cpsr_out),
-        .valid(cond_pass)
-    );
+    // For register_file:
+    wire [31:0] cpsr_out;
+    wire        rd_we;
+    wire        rd_in;
+    wire [31:0] write_rd;
+    wire [31:0] read_rn, read_rm;
+    wire [31:0] pc_in, cpsr_in;
+    wire        pc_we, cpsr_we;
+    wire [31:0] rn_out, rm_out;
+    wire [31:0] pc_out, cpsr_out;
+
+    // For cond_decode:
+    wire cond_pass;
+
+    // For shiftee_mux:
+    wire        shiftee_sel;
+    wire [7:0]  immed_8;
+    wire [31:0] shiftee;
+
+    // For shifter_mux:
+    wire [1:0]  shifter_sel;
+    wire [3:0]  rotate_imm;
+    wire [4:0]  shift_imm;
+    wire [31:0] shifter;
+
+    // For barrel_shifter:
+    wire [3:0]  barrel_sel;
+    wire [31:0] shifter_operand;  
+    wire [31:0] shifter_carry_out;
+
+    // For arm_alu:
+    wire [31:0] alu_out;
+    wire [3:0]  alu_sel;
 
     register_file Register
     (
@@ -42,41 +69,34 @@ module arm_core
         .cpsr_out(cpsr_out)
     );
 
- 
-    arm_decode ControlDecodeUnit
+    cond_decode CondDecoder
     (
         // Inputs
-        .cond_pass(cond_pass),
         .inst(inst),
+        .cpsr(cpsr_out),
         // Outputs
-        .write_rd(write_rd),
-        .read_rn(read_rn),
-        .read_rm(read_rm),
-        .rd_we(rd_we),
-        .pc_we(pc_we),
-        .cpsr_we(cpsr_we),
-        .rd_in(rd_in),
-        .pc_in(pc_in),
-        .cpsr_in(cpsr_in),
-        .shiftee_sel(shiftee_sel),
-        .immed_8_shiftee_in(immed_8),
-        .shifter_sel(shifter_sel),
-        .rotate_imm_shifter_in(rotate_imm),
-        .shift_imm_shifter_in(shift_imm),
-        .alu_sel(alu_sel),
-        .barrel_sel(barrel_sel)
+        .valid(cond_pass)
+    );
+ 
+    shiftee_mux ShifteeMux
+    (
+        // Inputs
+        .sel(shiftee_sel),
+        .immed_8(immed_8_shiftee_in),
+        .rm(rm_out),
+        // Output
+        .shiftee(shiftee)
     );
 
-    arm_alu alu
+    shifter_mux ShifterMux
     (
-        // Outputs
-        .alu_out(alu_out),
-        .cpsr_next(cpsr_in),
         // Inputs
-        .alu_op1(rn_out),
-        .alu_op2(shifter_operand),
-        .alu_op_sel(alu_sel),
-        .cpsr_prev(cpsr_out)
+        .sel(shifter_sel),
+        .rotate_imm(rotate_imm_shifter_in),
+        .shift_imm(shift_imm_shifter_in),
+        .rs(rs_out),
+        // Output
+        .shifter(shifter)
     );
 
     barrel_shifter Shifter
@@ -91,27 +111,52 @@ module arm_core
         .shifter_carry_out(shifter_carry_out)
     );
 
-    shiftee_mux ShifteeMux
+    arm_alu alu
     (
-        .sel(shiftee_sel),
-        .immed_8(immed_8_shiftee_in),
-        .rm(rm_out),
-        .shiftee(shiftee)
+        // Outputs
+        .alu_out(alu_out),
+        .cpsr_next(cpsr_in),
+        // Inputs
+        .alu_op1(rn_out),
+        .alu_op2(shifter_operand),
+        .alu_op_sel(alu_sel),
+        .cpsr_prev(cpsr_out)
     );
 
-    shifter_mux ShifterMux
+    arm_decode ControlDecodeUnit
     (
-        .sel(shifter_sel),
-        .rotate_imm(rotate_imm_shifter_in),
-        .shift_imm(shift_imm_shifter_in),
-        .rs(rs_out),
-        .shifter(shifter)
+        // Inputs
+        .cond_pass(cond_pass),
+        .inst(inst),
+        // Outputs
+        // To register_file:
+        .write_rd(write_rd),
+        .read_rn(read_rn),
+        .read_rm(read_rm),
+        .rd_we(rd_we),
+        .pc_we(pc_we),
+        .cpsr_we(cpsr_we),
+        .rd_in(rd_in),
+        .pc_in(pc_in),
+        .cpsr_in(cpsr_in),
+        // To shiftee_mux:
+        .shiftee_sel(shiftee_sel),
+        .immed_8_shiftee_in(immed_8),
+        // To shifter_mux:
+        .shifter_sel(shifter_sel),
+        .rotate_imm_shifter_in(rotate_imm),
+        .shift_imm_shifter_in(shift_imm),
+        // To arm_alu:
+        .alu_sel(alu_sel),
+        // To barrel_shifter:
+        .barrel_sel(barrel_sel)
     );
 
-    arm_mac mac
-    (
+    //arm_mac mac
+    //(
 
-    );
+    //);
+    
     // Instantiate muxes as required between each module
     // Mux select lines will have to be appropriately set
     // by the main decode unit
