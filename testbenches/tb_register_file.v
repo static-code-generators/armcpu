@@ -33,8 +33,9 @@ module tb_register_file;
 		#2 rd_in = 42;
 
 		for (i = 0; i < `NUM_REGS; i = i + 1) begin
+			#5
 			read_rn = i; //we aren't reading rm for now.
-			#2 write_rd = i;
+			write_rd = i;
 		end
 
 		#2 $finish;
