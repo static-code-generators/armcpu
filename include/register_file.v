@@ -40,6 +40,7 @@ module register_file
         if (reset) begin
             for (i = 0; i < NUM_REGS; i = i + 1)
                 registers[i] <= 0;
+            cpsr = 32'b0;
         end
         else begin 
             if (rd_we) begin
