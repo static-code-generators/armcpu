@@ -104,7 +104,6 @@ module arm_decode
                 /*--------- DATA PROCESSING INSTRUCTIONS ---------*/
                 2'b00: begin
                     // For register file:
-                    read_rm <= dcd_rm;
                     read_rn <= dcd_rn;
                     write_rd <= dcd_rd;
                     rd_we <= 1'b1;
@@ -120,6 +119,8 @@ module arm_decode
                             shifter_sel <= `ROTATE_IMM_SEL;
                         end
                         1'b0: begin
+                            read_rm <= dcd_rm; // shiftee register only in (obviously) non-immediate shifter operands
+
                             case (inst[4])
                                 1'b0: begin /* immediate shifts */
                                     shiftee_sel <= `RM_SEL;
@@ -135,7 +136,7 @@ module arm_decode
                                 end
                                 1'b1: begin /* register shifts */
                                     if (inst[7] == 0) begin
-                                        read_rs <= dcd_rs; // le wild register shift appeared
+                                        read_rs <= dcd_rs; // le wild shifter register appeared
                                         shiftee_sel <= `RM_SEL;
                                         shifter_sel <= `RS_SEL;
                                         /*--- FOR BARREL_SEL ----*/
