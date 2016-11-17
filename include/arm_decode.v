@@ -10,7 +10,7 @@ module arm_decode
     input      [31:0] inst, // input instruction
     /*---------- Outputs ------------*/
     // Inputs to register file:
-    output     [3:0]  write_rd, read_rn, read_rm, read_rs, // this line may change as well if they need to be assigned outputs conditionally
+    output reg [3:0]  write_rd, read_rn, read_rm, read_rs,
     output reg        rd_we, pc_we, cpsr_we,
     output reg [31:0] rd_in, pc_in, cpsr_in, // this line will probably change
     
@@ -25,7 +25,7 @@ module arm_decode
     output     [3:0]  rotate_imm_shifter_in,
     output     [4:0]  shift_imm_shifter_in,
 
-    output     [3:0]  alu_sel, // wired to ALU
+    output reg [3:0]  alu_sel, // wired to ALU
     output reg [3:0]  barrel_sel // wired to barrel_shifter
 );
 
@@ -81,22 +81,13 @@ module arm_decode
     /*------------ Instruction-type POV end ---------------*/
 
     /*------------ From module POV ------------*/
-
-    // For register file:
-    assign read_rm = dcd_rm;
-    assign read_rn = dcd_rn;
-    assign read_rs = dcd_rs;
-    assign write_rd = dcd_rd;
-
+    
     // For shiftee_mux inputs:
     assign immed_8_shiftee_in = dcd_dp_immed;
 
     // For shifter_mux inputs:
     assign shift_imm_shifter_in = dcd_shift_amt;
     assign rotate_imm_shifter_in = dcd_dp_rotate;
-
-    // For ALU:
-    assign alu_sel = dcd_opcode; // not sure if this will work for non-data-processing instructions, may be edited
 
     /*------------ Module POV end ------------*/
 
@@ -107,35 +98,78 @@ module arm_decode
     always @(*) begin
         if (cond_pass == 1) begin
 
-            /*--------------- FOR BARREL SHIFTER -----------------*/
-            case (inst[`I_BIT])
-                1'b1: begin /* 32-bit immediate */
-                    shiftee_sel <= `IMMED_8_SEL;
-                    shifter_sel <= `ROTATE_IMM_SEL;
-                end
-                1'b0: begin
-                    case (inst[4])
-                    1'b0: begin /* immediate shifts */
-                        shiftee_sel <= `RM_SEL;
-                        shifter_sel <= `SHIFT_IMM_SEL;
-                    end
-                    1'b1: begin /* register shifts */
-                        if (inst[7] == 0) begin
-                            shiftee_sel <= `RM_SEL;
-                            shifter_sel <= `RS_SEL;
-                        end
-                    end
-                    endcase
-                end
-            endcase
-            /*--------------- END BARREL SHIFTER -----------------*/
-
             /*--------------- OP-SPECIFIC DECODING -------------*/
+            case (inst[27:26])
 
-            //case (dcd_opcode)
+                /*--------- DATA PROCESSING INSTRUCTIONS ---------*/
+                2'b00: begin
+                    // For register file:
+                    read_rm <= dcd_rm;
+                    read_rn <= dcd_rn;
+                    write_rd <= dcd_rd;
+                    rd_we <= 1'b1;
+                    cpsr_we <= inst[`S_BIT];
 
+                    // For alu:
+                    alu_sel <= dcd_opcode;
+
+                    /*--------------- FOR BARREL SHIFTER -----------------*/
+                    case (inst[`I_BIT])
+                        1'b1: begin /* 32-bit immediate */
+                            shiftee_sel <= `IMMED_8_SEL;
+                            shifter_sel <= `ROTATE_IMM_SEL;
+                        end
+                        1'b0: begin
+                            case (inst[4])
+                                1'b0: begin /* immediate shifts */
+                                    shiftee_sel <= `RM_SEL;
+                                    shifter_sel <= `SHIFT_IMM_SEL;
+                                    /*--- FOR BARREL_SEL ----*/
+                                    case (dcd_shift)
+                                        2'b00: barrel_sel <= `LSLIMM;
+                                        2'b01: barrel_sel <= `LSRIMM;
+                                        2'b10: barrel_sel <= `ASRIMM;
+                                        2'b11: barrel_sel <= `RORIMM;
+                                    endcase
+                                    /*--- BARREL_SEL END ----*/
+                                end
+                                1'b1: begin /* register shifts */
+                                    if (inst[7] == 0) begin
+                                        read_rs <= dcd_rs; // le wild register shift appeared
+                                        shiftee_sel <= `RM_SEL;
+                                        shifter_sel <= `RS_SEL;
+                                        /*--- FOR BARREL_SEL ----*/
+                                        case (dcd_shift)
+                                            2'b00: barrel_sel <= `LSLREG;
+                                            2'b01: barrel_sel <= `LSRREG;
+                                            2'b10: barrel_sel <= `ASRREG;
+                                            2'b11: barrel_sel <= `RORREG;
+                                        endcase
+                                        /*--- BARREL_SEL END ----*/
+                                    end
+                                end
+                            endcase
+                        end
+                    endcase
+                    /*--------------- END BARREL SHIFTER -----------------*/
+
+                end
+                /*--------- END DATA PROCESSING ----------*/
+
+                /*--------- LOAD/STORE INSTRUCTIONS ----------*/
+                // Note that we aren't covering Load/store multiple here
+                2'b01: begin
+
+                end
+                /*------------ END LOAD/STORE --------------*/
                 
-            //endcase
+                /*------------ BRANCH INSTRUCTIONS -----------*/
+                2'b10: begin
+
+                end
+                /*------------ END BRANCH -----------*/
+
+            endcase
 
             /*--------------- END OP-SPECIFIC DECODING -------------*/
 

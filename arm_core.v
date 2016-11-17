@@ -21,10 +21,10 @@ module arm_core
     wire        rd_we;
     wire        rd_in;
     wire [31:0] write_rd;
-    wire [31:0] read_rn, read_rm;
+    wire [31:0] read_rn, read_rm, read_rs;
     wire [31:0] pc_in, cpsr_in;
     wire        pc_we, cpsr_we;
-    wire [31:0] rn_out, rm_out;
+    wire [31:0] rn_out, rm_out, rs_out;
     wire [31:0] pc_out, cpsr_out;
 
     // For cond_decode:
@@ -59,12 +59,14 @@ module arm_core
         .write_rd(write_rd),
         .read_rn(read_rn),
         .read_rm(read_rm),
+        .read_rs(read_rs),
         .pc_in(pc_in),
         .cpsr_in(cpsr_in),
         .pc_we(pc_we),
         // Outputs
         .rn_out(rn_out),
         .rm_out(rm_out),
+        .rs_out(rs_out),
         .pc_out(pc_out),
         .cpsr_out(cpsr_out)
     );
@@ -133,6 +135,7 @@ module arm_core
         .write_rd(write_rd),
         .read_rn(read_rn),
         .read_rm(read_rm),
+        .read_rs(read_rs),
         .rd_we(rd_we),
         .pc_we(pc_we),
         .cpsr_we(cpsr_we),
