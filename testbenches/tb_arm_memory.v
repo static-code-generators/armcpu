@@ -44,8 +44,7 @@ module tb_arm_memory;
             addr[0] = index;
             addr[1] = index; //this will probably lead to one ghost change.
             we[0] = 1; //cool we can write now.
-            index = index + 1;
-            #5;
+            index = index + 4;
         end
         else $finish;
     end
