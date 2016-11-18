@@ -23,15 +23,17 @@ module arm_decode
     // register file, only immediate values connected via decoder):
     output reg [1:0]  shiftee_sel,
     output     [7:0]  immed_8_shiftee_in, 
-    output     [31:0] immed_32_shiftee_in,
+    output reg [31:0] immed_32_shiftee_in,
 
     // Inputs to shifter_mux:
     output reg [1:0]  shifter_sel,
     output     [3:0]  rotate_imm_shifter_in,
-    output     [4:0]  shift_imm_shifter_in,
+    output reg [4:0]  shift_imm_shifter_in,
 
     output reg [3:0]  alu_sel, // wired to ALU
+    output     [31:0] alu_out,
     output reg [3:0]  barrel_sel // wired to barrel_shifter
+
 );
 
     /*----------------- Assigning decoded chunks ------------------*/
@@ -91,7 +93,8 @@ module arm_decode
     assign immed_8_shiftee_in = dcd_dp_immed;
 
     // For shifter_mux inputs:
-    assign shift_imm_shifter_in = dcd_shift_amt;
+    // (shift_imm_shifter_in has moved to inside
+    // data proc instructions, because fuck you, that's why)
     assign rotate_imm_shifter_in = dcd_dp_rotate;
 
     /*------------ Module POV end ------------*/
@@ -122,9 +125,11 @@ module arm_decode
                         1'b1: begin /* 32-bit immediate */
                             shiftee_sel <= `IMMED_8_SEL;
                             shifter_sel <= `ROTATE_IMM_SEL;
+                            shift_imm_shifter_in <= dcd_shift_amt;
                         end
                         1'b0: begin
                             read_rm <= dcd_rm; // shiftee register only in (obviously) non-immediate shifter operands
+                            shift_imm_shifter_in <= dcd_shift_amt;
 
                             case (inst[4])
                                 1'b0: begin /* immediate shifts */
@@ -176,7 +181,13 @@ module arm_decode
                         rd_we <= 1'b1;
                         rd_in <= pc_out + 4;
                     end
-                    pc_in <= {{6{inst[23]}}, inst} + 4;
+                    shiftee_sel <= `IMMED_32_SEL;
+                    shifter_sel <= `SHIFT_IMM_SEL;
+                    alu_sel <= `ADD;
+                    immed_32_shiftee_in <= {{6{inst[23]}}, inst[23:0], 2'b00} + 4;
+                    shift_imm_shifter_in <= 5'b00000;
+                    read_rn <= 15;
+                    pc_in <= alu_out;
                     pc_we <= 1'b1;
                 end
                 /*------------ END BRANCH -----------*/
