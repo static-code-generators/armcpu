@@ -25,10 +25,10 @@
 module arm_alu_syn
 (
     output reg [3:0] alu_out,
-    output reg [3:0] cpsr_out,
+    output reg [3:0] cpsr_out = 4'b0000,
     input      [3:0] alu_op1,
     input      [3:0] alu_op2,
-    input      [3:0]  alu_op_sel
+    input      [3:0] alu_op_sel
 );
 
     reg borrow;
