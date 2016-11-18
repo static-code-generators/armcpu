@@ -10,18 +10,32 @@
 
 module arm_memory
 (
-    input                  clk,
-    input      [0:1][31:0] addr,
-    input      [0:1][31:0] data_in,
-    input            [0:1] we,           // write enable
-    output reg       [0:1] excpt,        // exception bit
-    output reg [0:1][31:0] data_out
+    input             clk,
+    input      [31:0] addr1,
+    input      [31:0] addr2,
+    input      [31:0] data_in1,
+    input      [31:0] data_in2,
+    input      [0:1]  we,           // write enable
+    output reg [0:1]  excpt,        // exception bit
+    output     [31:0] data_out1,
+    output     [31:0] data_out2
 );
+    // used for implementing dual ports using for loop
+    wire [31:0] addr[0:1];
+    wire [31:0] data_in[0:1];
+    reg [31:0] data_out[0:1];
+    integer i;
+
+    assign addr[0] = addr1;
+    assign addr[1] = addr2;
+    assign data_in[0] = data_in1;
+    assign data_in[1] = data_in2;
+    assign data_out1 = data_out[0];
+    assign data_out2 = data_out[1];
+
+    // internal registers used for decoding
     reg region_sel [0:1];
     reg [31:0] offset [0:1];
-
-    // loop variable for two-port memory
-    integer i;
 
     // Memory regions
     reg [7:0] data_region[0 : `MEM_DATA_SIZE - 1];
