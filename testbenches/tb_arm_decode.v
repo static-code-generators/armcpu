@@ -60,7 +60,12 @@ module tb_arm_decode;
     initial begin
         $dumpfile("blah.vcd");
         $dumpvars;
-        cond_pass = 1'b1;
+        $monitor("inst: %x | %b\nalu_sel: %x, barrel_sel: %x, shiftee_sel: %x, shifter_sel: %x\nread_rn: %x, write_rd: %x, read_rm: %x, read_rs: %x\n-------\n",
+            inst, inst, alu_sel, barrel_sel, shiftee_sel, shifter_sel, read_rn, write_rd, read_rm, read_rs);
+    end
+
+    initial begin
+        #10 cond_pass = 1'b1;
 
         /*---- TEST CASES FOR DATA PROCESSING INSTRUCTIONS ----*/
         // Below cases have been taken from Section A5.1.2, ARM manual
@@ -74,6 +79,7 @@ module tb_arm_decode;
         #10 inst = 32'hE1A02100; // MOV R2, R0, LSL #2
         #10 inst = 32'hE0859185; // ADD R9, R5, R5, LSL #3
         #10 inst = 32'hE049A228; // SUB R10, R9, R8, LSR #4
+        #10 inst = 32'hE1A0C374; // MOV R12, R4, ROR R3
         /*---- DATA PROCESSING INSTRUCTIONS END ----*/
 
         /*---- TEST CASES FOR LOAD/STORE INSTRUCTIONS ----*/
@@ -83,7 +89,6 @@ module tb_arm_decode;
         /*---- TEST CASES FOR BRANCH INSTRUCTIONS ----*/
         // Add your cases here.
         /*---- BRANCH INSTRUCTIONS END ----*/
-
 
         #10 $finish;
     end
