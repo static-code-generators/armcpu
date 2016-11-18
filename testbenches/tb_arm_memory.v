@@ -16,7 +16,7 @@ module tb_arm_memory;
 
     integer index;
 
-    arm_memory uut(clk, addr, data_in, we, excpt, data_out);
+    arm_memory uut(clk, addr[0], addr[1], data_in[0], data_in[1], we, excpt, data_out[0], data_out[1]);
 
     always #1 clk = ~clk;
 
@@ -34,10 +34,6 @@ module tb_arm_memory;
         end
     end
 
-    initial begin
-        $monitor("%d %x", addr[1], data_out[1]);
-    end
-    
     always @(negedge clk) begin
         scan_file = $fscanf(data_file, "%x\n", captured_data);
         if (!$feof(data_file)) begin
@@ -54,7 +50,6 @@ module tb_arm_memory;
         else $finish;
     end
 
-    //oddly, this never triggers.
     always @(data_out[1]) begin
         $display("index: %d, data: %x",
             addr[1], data_out[1]);
