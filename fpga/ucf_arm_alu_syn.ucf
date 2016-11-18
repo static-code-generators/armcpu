@@ -1,0 +1,29 @@
+//ALU operand 1 (SW3-SW0)
+NET "alu_op1<3>" LOC = "B4";
+NET "alu_op1<2>" LOC = "K3";
+NET "alu_op1<1>" LOC = "L3";
+NET "alu_op1<0>" LOC = "P11";
+
+//ALU operand 2 (SW7-SW4)
+NET "alu_op2<3>" LOC = "N3";
+NET "alu_op2<2>" LOC = "E2";
+NET "alu_op2<1>" LOC = "F3";
+NET "alu_op2<0>" LOC = "G3";
+
+//ALU operand selector (BTN3-BTN0)
+NET "alu_op_sel<3>" LOC = "A7";
+NET "alu_op_sel<2>" LOC = "M4";
+NET "alu_op_sel<1>" LOC = "C11";
+NET "alu_op_sel<0>" LOC = "G12";
+
+//ALU ouput (LD3-LD0)
+NET "alu_out<3>" LOC = "P6";
+NET "alu_out<2>" LOC = "P7";
+NET "alu_out<1>" LOC = "M11";
+NET "alu_out<0>" LOC = "M5";
+
+//CPSR output (LD7-LD4)
+NET "cpsr_out<3>" LOC = "G1";
+NET "cpsr_out<2>" LOC = "P4";
+NET "cpsr_out<1>" LOC = "N4";
+NET "cpsr_out<0>" LOC = "N5";
