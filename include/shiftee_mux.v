@@ -1,7 +1,8 @@
 module shiftee_mux
 (
-    input             sel,
+    input      [1:0]  sel,
     input      [7:0]  immed_8,
+    input      [31:0] immed_32,
     input      [31:0] rm,
     output reg [31:0] shiftee
 );
@@ -13,6 +14,9 @@ module shiftee_mux
             end
             `RM_SEL: begin
                 shiftee <= rm;
+            end
+            `IMMED_32_SEL: begin
+                shiftee <= immed_32;
             end
         endcase
     end
