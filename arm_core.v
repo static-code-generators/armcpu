@@ -158,6 +158,7 @@ module arm_core
         .shift_imm_shifter_in(shift_imm),
         // To arm_alu:
         .alu_sel(alu_sel),
+        .alu_out(alu_out),
         // To barrel_shifter:
         .barrel_sel(barrel_sel)
     );
