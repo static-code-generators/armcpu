@@ -14,6 +14,10 @@ module arm_decode
     output reg        rd_we, pc_we, cpsr_we,
     output reg [31:0] rd_in, pc_in, cpsr_in, // this line will probably change
     
+    //outputs of register file:
+    output reg [31:0] rn_out, rm_out, rs_out,
+    output reg [31:0] pc_out, cpsr_out,
+
     // Control signals for various modules
     // Inputs to shiftee_mux (all register inputs will be connected to
     // register file, only immediate values connected via decoder):
@@ -166,7 +170,13 @@ module arm_decode
                 
                 /*------------ BRANCH INSTRUCTIONS -----------*/
                 2'b10: begin
-
+                    if (inst[24] == 1'b1) begin //store PC + 4 in link register.
+                        write_rd <= `LINK_REG;
+                        rd_we <= 1'b1;
+                        rd_in <= pc_out + 4;
+                    end
+                    pc_in <= {{6{inst[23]}}, inst} + 4;
+                    pc_we <= 1'b1;
                 end
                 /*------------ END BRANCH -----------*/
 
