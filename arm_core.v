@@ -30,8 +30,9 @@ module arm_core
     wire cond_pass;
 
     // For shiftee_mux:
-    wire        shiftee_sel;
+    wire [1:0]  shiftee_sel;
     wire [7:0]  immed_8;
+    wire [31:0] immed_32;
     wire [31:0] shiftee;
 
     // For shifter_mux:
@@ -84,6 +85,7 @@ module arm_core
         // Inputs
         .sel(shiftee_sel),
         .immed_8(immed_8),
+        .immed_32(immed_32),
         .rm(rm_out),
         // Output
         .shiftee(shiftee)
@@ -149,6 +151,7 @@ module arm_core
         // To shiftee_mux:
         .shiftee_sel(shiftee_sel),
         .immed_8_shiftee_in(immed_8),
+        .immed_32_shiftee_in(immed_32),
         // To shifter_mux:
         .shifter_sel(shifter_sel),
         .rotate_imm_shifter_in(rotate_imm),

@@ -55,8 +55,9 @@
 /* For SHIFTEE_SEL */
 // These select bits have been chosen arbitrarily.
 // Refer to `assets/shitty_datapath.jpg` for details.
-`define IMMED_8_SEL 1'b0
-`define RM_SEL      1'b1
+`define IMMED_8_SEL  2'b00
+`define RM_SEL       2'b01
+`define IMMED_32_SEL 2'b10
 
 /* For SHIFTER_SEL */
 // These select bits have been chosen arbitrarily.
