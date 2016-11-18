@@ -1,14 +1,14 @@
 //ALU operand 1 (SW3-SW0)
-NET "alu_op1<3>" LOC = "B4";
-NET "alu_op1<2>" LOC = "K3";
-NET "alu_op1<1>" LOC = "L3";
-NET "alu_op1<0>" LOC = "P11";
+NET "alu_op1<3>" LOC = "N3";
+NET "alu_op1<2>" LOC = "E2";
+NET "alu_op1<1>" LOC = "F3";
+NET "alu_op1<0>" LOC = "G3";
 
 //ALU operand 2 (SW7-SW4)
-NET "alu_op2<3>" LOC = "N3";
-NET "alu_op2<2>" LOC = "E2";
-NET "alu_op2<1>" LOC = "F3";
-NET "alu_op2<0>" LOC = "G3";
+NET "alu_op2<3>" LOC = "B4";
+NET "alu_op2<2>" LOC = "K3";
+NET "alu_op2<1>" LOC = "L3";
+NET "alu_op2<0>" LOC = "P11";
 
 //ALU operand selector (BTN3-BTN0)
 NET "alu_op_sel<3>" LOC = "A7";
