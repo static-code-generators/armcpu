@@ -3,3 +3,4 @@
 *.*swo
 arm2hex/*.s
 arm2hex/*.x
+*.vcd
