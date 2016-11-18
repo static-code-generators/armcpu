@@ -15,6 +15,14 @@ module arm_core
     output reg        mem_write_en  // Enable writes to memory for store ops
 );
 
+    always @(posedge clk) begin
+        if (!rst) begin
+            inst_addr <= pc_out;
+            pc_in <= pc_out + 4;
+            pc_we <= 1'b1;
+        end
+    end
+
     // For register_file:
     wire        rd_we;
     wire [31:0] rd_in;

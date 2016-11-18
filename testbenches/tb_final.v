@@ -40,4 +40,37 @@ module tb_final;
         .mem_write_en(mem_write_en)
     );
 
+    always #10 clk = ~clk;
+
+    integer index;
+
+    initial begin
+        index = 0;
+        clk = 0;
+        rst = 1;
+        text_file = $fopen(`TEST_FILE_NAME, "r");
+
+        if (data_file == `NULL) begin
+            $display("bad bad | text file handle was NULL");
+            $finish;
+        end
+    end
+
+    always @(negedge clk) begin
+        scan_file = $fscanf(text_file, "%x\n", captured_data);
+        if (!$feof(text_file)) begin
+            $display("read from file: %x, trying to write to: %d",
+            mem_data_in, index);
+            //mem_write_en = 0; //not ready to write yet.
+            mem_addr = index;
+            mem_write_en = 1;
+            index = index + 4;
+        end
+        else begin
+            rst = 0;
+            if (halted)
+                #10 $finish;
+        end
+    end
+
 endmodule
