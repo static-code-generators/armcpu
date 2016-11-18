@@ -15,6 +15,7 @@ The test-bench takes in an ARM assembly file as input via Makefile arguments and
     * `cond_decode.v` - Checks for CPSR condition validity
     * `arm_alu.v` - Does appropriate arithmetic op on input operands depending on select lines
 * `arm_core.v` - Top-level module for instantiating all individual components in `include/`; test-bench will be run on this
+* `fpga` - Contains a simplified version of the arm_alu that is demonstrated on the Basys2 board.
 
 Various muxes will have to be instantiated between each module for selecting operands, etc.
 
