@@ -16,7 +16,7 @@ module arm_decode
     
     // Control signals for various modules
     // Inputs to shiftee_mux (all register inputs will be connected to
-    // register file, only immediate values connected via decoder:
+    // register file, only immediate values connected via decoder):
     output reg        shiftee_sel,
     output     [7:0]  immed_8_shiftee_in, 
 
