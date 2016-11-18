@@ -5,15 +5,14 @@ module arm_core
 (
     // Inputs
     input             clk, rst,
-    input      [31:0] inst,
+    input      [31:0] inst,         // Instruction from memory
     input      [31:0] mem_data_out, // Data from memory load
     // Outputs
     output reg        halted,
-    output reg [29:0] mem_addr,     // Address of data to load
-    output reg [29:0] inst_addr,    // Address of next instruction to load from memory
-    // Load op inputs to memory are 30 bits because lower 2 bits are
-    // implicity zero, address divisible by 4 because word-aligned
-    output reg [31:0] mem_data_in   // Data for memory store
+    output reg [31:0] mem_addr,     // Address of data to load/store
+    output reg [31:0] inst_addr,    // Address of next instruction to load from memory
+    output reg [31:0] mem_data_in,  // Data for memory store
+    output reg        mem_write_en  // Enable writes to memory for store ops
 );
 
     // For register_file:
