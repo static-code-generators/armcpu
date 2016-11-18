@@ -70,3 +70,6 @@
 `define CPSR_Z 30
 `define CPSR_C 29
 `define CPSR_V 28
+
+/* For Branch (Link register) */
+`define LINK_REG 14
