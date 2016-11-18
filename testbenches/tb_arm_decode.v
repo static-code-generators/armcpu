@@ -60,9 +60,31 @@ module tb_arm_decode;
     initial begin
         $dumpfile("blah.vcd");
         $dumpvars;
+        cond_pass = 1'b1;
 
-        #10 inst = 32'b11100010000000010001000000000010; // AND R1, R1, #2
-            cond_pass = 1'b1;
+        /*---- TEST CASES FOR DATA PROCESSING INSTRUCTIONS ----*/
+        // Below cases have been taken from Section A5.1.2, ARM manual
+        // Immediate operand value
+        #10 inst = 32'hE2011002; // AND R1, R1, #2
+        #10 inst = 32'hE3C89CFF; // BIC R9, R8, #0xFF00
+        // Register operand value
+        #10 inst = 32'hE0834002; // ADD R4, R3, R2
+        #10 inst = 32'hE1570008; // CMP R7, R8
+        // Shifted register operand value
+        #10 inst = 32'hE1A02100; // MOV R2, R0, LSL #2
+        #10 inst = 32'hE0859185; // ADD R9, R5, R5, LSL #3
+        #10 inst = 32'hE049A228; // SUB R10, R9, R8, LSR #4
+        /*---- DATA PROCESSING INSTRUCTIONS END ----*/
+
+        /*---- TEST CASES FOR LOAD/STORE INSTRUCTIONS ----*/
+        // Add your cases here.
+        /*---- LOAD/STORE INSTRUCTIONS END ----*/
+
+        /*---- TEST CASES FOR BRANCH INSTRUCTIONS ----*/
+        // Add your cases here.
+        /*---- BRANCH INSTRUCTIONS END ----*/
+
+
         #10 $finish;
     end
 
