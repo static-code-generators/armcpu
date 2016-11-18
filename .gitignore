@@ -1,3 +1,5 @@
 *a.out
 *.*swp
 *.*swo
+arm2hex/*.s
+arm2hex/*.x
