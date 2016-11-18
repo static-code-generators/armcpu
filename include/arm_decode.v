@@ -117,6 +117,9 @@ module arm_decode
                     rd_we <= 1'b1;
                     cpsr_we <= inst[`S_BIT];
 
+                    // For shifter mux input.
+                    shift_imm_shifter_in <= dcd_shift_amt;
+
                     // For alu:
                     alu_sel <= dcd_opcode;
 
@@ -125,11 +128,9 @@ module arm_decode
                         1'b1: begin /* 32-bit immediate */
                             shiftee_sel <= `IMMED_8_SEL;
                             shifter_sel <= `ROTATE_IMM_SEL;
-                            shift_imm_shifter_in <= dcd_shift_amt;
                         end
                         1'b0: begin
                             read_rm <= dcd_rm; // shiftee register only in (obviously) non-immediate shifter operands
-                            shift_imm_shifter_in <= dcd_shift_amt;
 
                             case (inst[4])
                                 1'b0: begin /* immediate shifts */
