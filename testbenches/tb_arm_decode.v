@@ -76,7 +76,7 @@ module tb_arm_decode;
     end
 
     initial begin
-        $monitor("inst: %x | %b\nshiftee_sel: %b, shifter_sel: %b\nimmed_32: %b shift_imm: %b\nread_rn: %d, pc_we: %d\n---------\n",
+        $monitor("inst: %x | %b\nshiftee_sel: %b, shifter_sel: %b\nimmed_32: %d shift_imm: %b\nread_rn: %d, pc_we: %d\n---------\n",
             inst, inst, shiftee_sel, shifter_sel, immed_32, shift_imm, read_rn, pc_we);
     end
 
@@ -103,7 +103,7 @@ module tb_arm_decode;
         /*---- LOAD/STORE INSTRUCTIONS END ----*/
 
         /*---- TEST CASES FOR BRANCH INSTRUCTIONS ----*/
-        #10 inst = 32'hEB00000A; //BL 42
+        #10 inst = 32'hEB00000B; //BL 44
         /*---- BRANCH INSTRUCTIONS END ----*/
 
         #10 $finish;
