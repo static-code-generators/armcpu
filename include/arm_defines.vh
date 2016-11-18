@@ -53,10 +53,14 @@
 `define IMMED  4'b1000
 
 /* For SHIFTEE_SEL */
+// These select bits have been chosen arbitrarily.
+// Refer to `assets/shitty_datapath.jpg` for details.
 `define IMMED_8_SEL 1'b0
 `define RM_SEL      1'b1
 
 /* For SHIFTER_SEL */
+// These select bits have been chosen arbitrarily.
+// Refer to `assets/shitty_datapath.jpg` for details.
 `define ROTATE_IMM_SEL 2'b00
 `define SHIFT_IMM_SEL  2'b01
 `define RS_SEL         2'b10

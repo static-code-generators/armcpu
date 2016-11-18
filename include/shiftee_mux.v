@@ -8,10 +8,10 @@ module shiftee_mux
 
     always @(*) begin
         case (sel)
-            1'b0: begin
+            `IMMED_8_SEL: begin
                 shiftee <= {{24{immed_8[7]}}, immed_8};
             end
-            1'b1: begin
+            `RM_SEL: begin
                 shiftee <= rm;
             end
         endcase
