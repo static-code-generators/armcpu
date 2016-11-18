@@ -10,10 +10,13 @@ module tb_arm_decode;
     wire [3:0]  read_rn, read_rm, read_rs;
     wire [31:0] pc_in, cpsr_in;
     wire        pc_we, cpsr_we;
+    wire [31:0] rn_out, rm_out, rs_out;
+    wire [31:0] pc_out, cpsr_out;
 
     // For shiftee_mux:
-    wire        shiftee_sel;
+    wire [1:0]  shiftee_sel;
     wire [7:0]  immed_8;
+    wire [31:0] immed_32;
 
     // For shifter_mux:
     wire [1:0]  shifter_sel;
@@ -25,6 +28,7 @@ module tb_arm_decode;
 
     // For arm_alu:
     wire [3:0]  alu_sel;
+    wire [31:0] alu_out;
 
    
     arm_decode ControlDecodeUnit
@@ -44,15 +48,22 @@ module tb_arm_decode;
         .rd_in(rd_in),
         .pc_in(pc_in),
         .cpsr_in(cpsr_in),
+        .rn_out(rn_out),
+        .rm_out(rm_out),
+        .rs_out(rs_out),
+        .pc_out(pc_out),
+        .cpsr_out(cpsr_out),
         // To shiftee_mux:
         .shiftee_sel(shiftee_sel),
         .immed_8_shiftee_in(immed_8),
+        .immed_32_shiftee_in(immed_32),
         // To shifter_mux:
         .shifter_sel(shifter_sel),
         .rotate_imm_shifter_in(rotate_imm),
         .shift_imm_shifter_in(shift_imm),
         // To arm_alu:
         .alu_sel(alu_sel),
+        .alu_out(alu_out),
         // To barrel_shifter:
         .barrel_sel(barrel_sel)
     );
@@ -62,6 +73,11 @@ module tb_arm_decode;
         $dumpvars;
         $monitor("inst: %x | %b\nalu_sel: %x, barrel_sel: %x, shiftee_sel: %x, shifter_sel: %x\nread_rn: %x, write_rd: %x, read_rm: %x, read_rs: %x\n-------\n",
             inst, inst, alu_sel, barrel_sel, shiftee_sel, shifter_sel, read_rn, write_rd, read_rm, read_rs);
+    end
+
+    initial begin
+        $monitor("inst: %x | %b\nprogram counter: %d read_rn: %d rn_out: %d\n---------\n",
+            inst, inst, pc_out, read_rn, rn_out);
     end
 
     initial begin
@@ -87,7 +103,7 @@ module tb_arm_decode;
         /*---- LOAD/STORE INSTRUCTIONS END ----*/
 
         /*---- TEST CASES FOR BRANCH INSTRUCTIONS ----*/
-        // Add your cases here.
+        #10 inst = 32'hEB00000A; //BL 42
         /*---- BRANCH INSTRUCTIONS END ----*/
 
         #10 $finish;
