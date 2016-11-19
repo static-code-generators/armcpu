@@ -79,9 +79,9 @@ module tb_final;
 
     always @(negedge clk) begin
         scan_file = $fscanf(text_file, "%x\n", mem_data_in);
-        if (!$feof(text_file)) begin
-            /*$display("read from file: %x, trying to write to: %d",
-            mem_data_in, index);*/
+        if (scan_file != -1) begin
+            $display("read from file: %x, trying to write to: %d",
+                mem_data_in, index);
             mem_write_en = 0; //not ready to write yet.
             mem_addr = index;
             mem_write_en = 1;
