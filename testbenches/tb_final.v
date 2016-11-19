@@ -18,6 +18,13 @@ module tb_final;
 
     // For arm_core:
     reg rst;
+    wire halted;
+    wire [31:0] mem_addr1, inst_addr1, mem_data_in1;
+    wire  mem_write_en1;
+    assign mem_addr1 = mem_addr;
+    assign inst_addr1 = inst_addr;
+    assign mem_data_in1 = mem_data_in;
+    assign mem_write_en1 = mem_write_en;
 
     arm_memory memauri
     (
@@ -43,10 +50,10 @@ module tb_final;
         .mem_data_out(mem_data_out),
         // Outputs
         .halted(halted),
-        .mem_addr(mem_addr),
-        .inst_addr(inst_addr),
-        .mem_data_in(mem_data_in),
-        .mem_write_en(mem_write_en)
+        .mem_addr(mem_addr1),
+        .inst_addr(inst_addr1),
+        .mem_data_in(mem_data_in1),
+        .mem_write_en(mem_write_en1)
     );
 
     always #10 clk = ~clk;
