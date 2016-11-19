@@ -33,6 +33,26 @@ module arm_memory
     assign data_out1 = data_out[0];
     assign data_out2 = data_out[1];
 
+
+    /*always @ (data_in[1]) begin
+        $display("mem1: data_in %x", data_in[1]);
+    end
+
+    always @ (we[1]) begin
+        $display("we: %x", we[1]);
+    end
+
+    always @ (data_in[0]) begin
+        $display("mem0: data_in %x", data_in[0]);
+    end
+
+    [>always @ (data_out[0]) begin
+        $display("mem0: data_out %x", data_out[0]);
+    end<]
+    always @ (data_out[1]) begin
+        $display("mem1: data_out %x", data_out[1]);
+    end*/
+
     // internal registers used for decoding
     reg region_sel [0:1];
     reg [31:0] offset [0:1];
@@ -45,7 +65,7 @@ module arm_memory
     always @ (*) begin
         for (i = 0; i < 2; i = i + 1) begin
             ADDR_DECODE(offset[i], region_sel[i], excpt[i], addr[i]);
-            if (!we[i] && !excpt[i]) begin
+            if (!excpt[i]) begin
                 if (region_sel[i] == `MEM_DATA) begin
                     data_out[i] = (data_region[offset[i] + 0] << 24) |
                                   (data_region[offset[i] + 1] << 16) |
@@ -68,6 +88,7 @@ module arm_memory
     always @ (posedge clk) begin
         for (i = 0; i < 2; i = i + 1) begin
             if (we[i] && !excpt[i]) begin
+            //$display("mem%b: offset %x, region %x excpt %x addr %x we %x", i[0], offset[i], region_sel[i], excpt[i], addr[i], we[i]);
                 if (region_sel[i] == `MEM_DATA) begin
                     data_region[offset[i] + 0] <= (data_in[i] >> 24) & 8'hFF; 
                     data_region[offset[i] + 1] <= (data_in[i] >> 16) & 8'hFF; 

@@ -42,7 +42,7 @@ module register_file
                 registers[i] <= 0;
             cpsr <= 32'b0;
             registers[15] <= 32'b0;
-            $display("pc: %d\n", registers[15]);
+            $display("reg[15]: %d", registers[15]);
         end
         else begin 
             if (rd_we) begin

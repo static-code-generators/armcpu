@@ -17,9 +17,9 @@ module arm_core
 
     always @(posedge clk) begin
         if (rst)
-            $display("pc_out: %d\n", pc_out);
+            $display("pc_out: %d", pc_out);
         if (!rst) begin
-            //$display("pc_out: %d\n", pc_out);
+            //$display("pc_out: %d", pc_out);
             inst_addr <= pc_out;
         end
     end

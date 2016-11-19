@@ -4,11 +4,11 @@
 module tb_arm_memory;
     reg clk;
     reg [0:1] we;
-    reg [0:1][31:0] addr;
-    reg [0:1][31:0] data_in;
+    reg [31:0] addr[0:1];
+    reg [31:0] data_in[0:1];
 
     wire [0:1] excpt;
-    wire [0:1][31:0] data_out;
+    wire [31:0] data_out[0:1];
 
     integer data_file;
     integer scan_file;
@@ -39,11 +39,11 @@ module tb_arm_memory;
         if (!$feof(data_file)) begin
             $display("read from file: %x, trying to write to: %d",
                 captured_data, index);
-            we[0] = 0; //not ready to write yet.
-            data_in[0] = captured_data;
-            addr[0] = index;
-            addr[1] = index; //this will probably lead to one ghost change.
-            we[0] = 1; //cool we can write now.
+            we[1] = 0; //not ready to write yet.
+            data_in[1] = captured_data;
+            addr[1] = index;
+            //addr[1] = index; //this will probably lead to one ghost change.
+            we[1] = 1; //cool we can write now.
             index = index + 4;
         end
         else $finish;

@@ -5,14 +5,15 @@ module tb_final;
 
     // For arm_memory:
     reg        clk;
-    reg [31:0] inst_addr, mem_addr;
+    reg [31:0] inst_addr;
+    reg [31:0] mem_addr;
     reg [31:0] mem_data_in;
     reg        mem_write_en;
-    wire [1:0]  excpt;
+    wire [0:1]  excpt;
     wire [31:0] inst;
     wire [31:0] mem_data_out;
 
-    wire [1:0] we;
+    wire [0:1] we;
     assign we[0] = 1'b0;
     assign we[1] = mem_write_en;
 
@@ -32,7 +33,7 @@ module tb_final;
         .clk(clk),
         .addr1(inst_addr),
         .addr2(mem_addr),
-        .data_in1(),
+        .data_in1(0),
         .data_in2(mem_data_in),
         .we(we),
         // Outputs
@@ -78,16 +79,20 @@ module tb_final;
         if (!$feof(text_file)) begin
             $display("read from file: %x, trying to write to: %d",
             mem_data_in, index);
-            //mem_write_en = 0; //not ready to write yet.
+            mem_write_en = 0; //not ready to write yet.
             mem_addr = index;
             mem_write_en = 1;
             index = index + 4;
         end
         else begin
             rst = 0;
-            if (halted)
-                #10 $finish;
+            //if (halted)
+                #1000 $finish;
         end
+    end
+
+    always @(mem_data_out) begin
+        $display("addr: %d, data: %x", mem_addr, mem_data_out);
     end
 
 endmodule
