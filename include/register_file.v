@@ -40,7 +40,9 @@ module register_file
         if (reset) begin
             for (i = 0; i < NUM_REGS; i = i + 1)
                 registers[i] <= 0;
-            cpsr = 32'b0;
+            cpsr <= 32'b0;
+            registers[15] <= 32'b0;
+            $display("pc: %d\n", registers[15]);
         end
         else begin 
             if (rd_we) begin
@@ -48,6 +50,10 @@ module register_file
             end
             if (pc_we) begin
                 registers[15] <= pc_in;
+            end
+            if (!pc_we) begin
+                //$display("pc: %d\n", registers[15]);
+                registers[15] <= registers[15] + 4;
             end
             if (cpsr_we) begin
                 cpsr <= cpsr_in;
