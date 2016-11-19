@@ -18,12 +18,22 @@ module arm_core
     always @(posedge clk) begin
         if (!rst) begin
             $display("instruction: %x", inst);
+            $display("rn_out: %x, shifter_op: %x", rn_out, shifter_operand);
             inst_addr <= pc_out;
             if (inst == 32'he3a000bb)
                 halted <= 1'b1;
         end
     end
+    initial begin
+        $monitor("\ninst: %x | %b\nalu_sel: %x, barrel_sel: %x, shiftee_sel: %x, shifter_sel: %x\nread_rn: %x, write_rd: %x, read_rm: %x, read_rs: %x\n-------\n",
+            inst, inst, alu_sel, barrel_sel, shiftee_sel, shifter_sel, read_rn, write_rd, read_rm, read_rs);
+    end
 
+    /*initial begin
+        $monitor("inst: %x | %b\nshiftee_sel: %b, shifter_sel: %b\nimmed_32: %d shift_imm: %b\nread_rn: %d, pc_we: %d\n---------\n",
+            inst, inst, shiftee_sel, shifter_sel, immed_32, shift_imm, read_rn, pc_we);
+    end
+*/
     // For register_file:
     wire        rd_we;
     wire [31:0] rd_in;

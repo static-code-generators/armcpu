@@ -37,15 +37,15 @@ module register_file
 
     // Write operation is sequential (clocked at posedge)
     always @(posedge clk or posedge reset) begin // asynchronous reset
-        for (j = 0; j < NUM_REGS; j = j + 1) begin
-            //$display("register[%d]: %x", j, registers[j]);
-        end
         if (reset) begin
             for (i = 0; i < NUM_REGS; i = i + 1)
                 registers[i] <= 0;
             cpsr <= 32'b0;
         end
         else begin 
+            for (j = 0; j < NUM_REGS; j = j + 1) begin
+                $display("register[%d]: %x", j, registers[j]);
+            end
             if (rd_we) begin
                 registers[write_rd] <= rd_in;
             end
