@@ -10,10 +10,10 @@ module shifter_mux
     always @(*) begin
         case (sel)
             `ROTATE_IMM_SEL: begin
-                shifter <= {{28{rotate_imm[3]}}, rotate_imm}; // sign-extended
+                shifter <= {28'b0, rotate_imm}; // sign-extended
             end
             `SHIFT_IMM_SEL: begin
-                shifter <= {{27{shift_imm[4]}}, shift_imm};
+                shifter <= {27'b0, shift_imm};
             end
             `RS_SEL: begin
                 shifter <= rs;

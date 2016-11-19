@@ -122,11 +122,7 @@ module barrel_shifter
                     shifter_operand <= (shiftee >>> shifter[7:0]);
                     shifter_carry_out <= shiftee[shifter[7:0] - 1];
                 end
-                else if (shifter[7:0] == 32) begin
-                    shifter_operand <= 0;
-                    shifter_carry_out <= shiftee[31];
-                end
-                else begin /* shifter[7:0] > 32 */
+                else begin /* shifter[7:0] >= 32 */
                     if (shiftee[31] == 0) begin
                         shifter_operand <= 0;
                         shifter_carry_out <= shiftee[31];
