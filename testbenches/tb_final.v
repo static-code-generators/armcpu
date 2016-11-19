@@ -3,12 +3,21 @@
 
 module tb_final;
 
+    // For arm_memory:
     reg        clk;
-    wire [1:0] we;
-    wire [1:0] excpt;
+    reg [31:0] inst_addr, mem_addr;
+    reg [31:0] mem_data_in;
+    reg        mem_write_en;
+    wire [1:0]  excpt;
+    wire [31:0] inst;
+    wire [31:0] mem_data_out;
 
+    wire [1:0] we;
     assign we[0] = 1'b0;
     assign we[1] = mem_write_en;
+
+    // For arm_core:
+    reg rst;
 
     arm_memory memauri
     (
@@ -19,8 +28,8 @@ module tb_final;
         .data_in1(),
         .data_in2(mem_data_in),
         .we(we),
-        .excpt(excpt),
         // Outputs
+        .excpt(excpt),
         .data_out1(inst),
         .data_out2(mem_data_out)
     );
@@ -36,13 +45,14 @@ module tb_final;
         .halted(halted),
         .mem_addr(mem_addr),
         .inst_addr(inst_addr),
-        .mem_data_in(mem_data_in)
+        .mem_data_in(mem_data_in),
         .mem_write_en(mem_write_en)
     );
 
     always #10 clk = ~clk;
 
     integer index;
+    integer text_file, scan_file;
 
     initial begin
         index = 0;
@@ -50,14 +60,14 @@ module tb_final;
         rst = 1;
         text_file = $fopen(`TEST_FILE_NAME, "r");
 
-        if (data_file == `NULL) begin
+        if (text_file == `NULL) begin
             $display("bad bad | text file handle was NULL");
             $finish;
         end
     end
 
     always @(negedge clk) begin
-        scan_file = $fscanf(text_file, "%x\n", captured_data);
+        scan_file = $fscanf(text_file, "%x\n", mem_data_in);
         if (!$feof(text_file)) begin
             $display("read from file: %x, trying to write to: %d",
             mem_data_in, index);
