@@ -75,10 +75,10 @@ module tb_arm_decode;
             inst, inst, alu_sel, barrel_sel, shiftee_sel, shifter_sel, read_rn, write_rd, read_rm, read_rs);
     end
 
-    initial begin
-        $monitor("inst: %x | %b\nshiftee_sel: %b, shifter_sel: %b\nimmed_32: %d shift_imm: %b\nread_rn: %d, pc_we: %d\n---------\n",
-            inst, inst, shiftee_sel, shifter_sel, immed_32, shift_imm, read_rn, pc_we);
-    end
+    //initial begin
+        //$monitor("inst: %x | %b\nshiftee_sel: %b, shifter_sel: %b\nimmed_32: %d shift_imm: %b\nread_rn: %d, pc_we: %d\n---------\n",
+            //inst, inst, shiftee_sel, shifter_sel, immed_32, shift_imm, read_rn, pc_we);
+    //end
 
     initial begin
         #10 cond_pass = 1'b1;
@@ -86,6 +86,7 @@ module tb_arm_decode;
         /*---- TEST CASES FOR DATA PROCESSING INSTRUCTIONS ----*/
         // Below cases have been taken from Section A5.1.2, ARM manual
         // Immediate operand value
+        #10 inst = 32'hE3A010FF;
         #10 inst = 32'hE2011002; // AND R1, R1, #2
         #10 inst = 32'hE3C89CFF; // BIC R9, R8, #0xFF00
         // Register operand value

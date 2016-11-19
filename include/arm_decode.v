@@ -132,6 +132,7 @@ module arm_decode
                         1'b1: begin /* 32-bit immediate */
                             shiftee_sel <= `IMMED_8_SEL;
                             shifter_sel <= `ROTATE_IMM_SEL;
+                            barrel_sel <= `IMMED;
                         end
                         1'b0: begin
                             read_rm <= dcd_rm; // shiftee register only in (obviously) non-immediate shifter operands
