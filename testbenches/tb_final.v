@@ -1,5 +1,5 @@
 `define NULL 0
-`define TEST_FILE_NAME "test/additest.x"
+`define TEST_FILE_NAME "test/addiu.x"
 
 module tb_final;
 

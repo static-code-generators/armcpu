@@ -43,13 +43,10 @@ module register_file
             cpsr <= 32'b0;
         end
         else begin 
-            for (j = 0; j < NUM_REGS; j = j + 1) begin
-                $display("register[%d]: %x", j, registers[j]);
-            end
             if (rd_we) begin
                 registers[write_rd] <= rd_in;
             end
-            if (pc_we) begin
+            if (pc_we && write_rd != 15) begin
                 registers[15] <= pc_in;
             end
             if (!pc_we) begin
@@ -57,6 +54,10 @@ module register_file
             end
             if (cpsr_we) begin
                 cpsr <= cpsr_in;
+            end
+            $display("cpsr: %b", cpsr[31:28]);
+            for (j = 0; j < NUM_REGS; j = j + 1) begin
+                $display("register[%d]: %x", j, registers[j]);
             end
         end
     end

@@ -20,7 +20,7 @@ module arm_core
             $display("instruction: %x", inst);
             $display("rn_out: %x, shifter_op: %x alu_out: %x", rn_out, shifter_operand, alu_out);
             inst_addr <= pc_out;
-            if (inst == 32'he3a000bb)
+            if (inst == 32'hef00000a)
                 halted <= 1'b1;
         end
     end
@@ -167,7 +167,6 @@ module arm_core
         .cpsr_we(cpsr_we),
         .rd_in(rd_in),
         .pc_in(pc_in),
-        .cpsr_in(cpsr_in),
         // To shiftee_mux:
         .shiftee_sel(shiftee_sel),
         .immed_8_shiftee_in(immed_8),

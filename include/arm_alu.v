@@ -58,6 +58,7 @@ module arm_alu
         endcase
         cpsr_next[`CPSR_N] = alu_out[31];
         cpsr_next[`CPSR_Z] = (alu_out == 0);
+        $display("\tALU cpsr_next %b cpsr_prev %b", cpsr_next[31:28], cpsr_prev[31:28]);
     end
 
     /**

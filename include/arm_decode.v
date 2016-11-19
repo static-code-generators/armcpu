@@ -18,7 +18,7 @@ module arm_decode
     // Inputs to register file:
     output reg [3:0]  write_rd, read_rn, read_rm, read_rs,
     output reg        rd_we, pc_we, cpsr_we,
-    output reg [31:0] rd_in, pc_in, cpsr_in, // this line will probably change
+    output reg [31:0] rd_in, pc_in, // this line will probably change
     
     // Control signals for various modules
     // Inputs to shiftee_mux (all register inputs will be connected to
@@ -105,7 +105,6 @@ module arm_decode
     /*----------------- Decoded chunks end ------------------*/
 
     /*----------- Actual decoding by instruction details ---------*/
-
     always @(*) begin
         pc_we <= 1'b0;
         if (cond_pass == 1) begin
@@ -194,8 +193,11 @@ module arm_decode
                     immed_32_shiftee_in <= {{6{inst[23]}}, inst[23:0], 2'b00} + 4;
                     shift_imm_shifter_in <= 5'b00000;
                     read_rn <= 15;
+                    cpsr_we <= 1'b0;
                     pc_in <= alu_out;
                     pc_we <= 1'b1;
+                    $display(pc_in);
+                    $display(alu_out);
                 end
                 /*------------ END BRANCH -----------*/
 
