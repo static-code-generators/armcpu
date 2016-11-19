@@ -16,11 +16,11 @@ module arm_core
 );
 
     always @(posedge clk) begin
-        if (rst)
-            //$display("pc_out: %d", pc_out);
         if (!rst) begin
-            //$display("pc_out: %d", pc_out);
+            $display("instruction: %x", inst);
             inst_addr <= pc_out;
+            if (inst == 32'he3a000bb)
+                halted <= 1'b1;
         end
     end
 

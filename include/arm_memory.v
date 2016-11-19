@@ -33,8 +33,14 @@ module arm_memory
     assign data_out1 = data_out[0];
     assign data_out2 = data_out[1];
 
+    /*always @ (addr[0]) begin
+        $display("mem0: addr %x", addr[0]);
+    end
+    always @ (addr[1]) begin
+        $display("mem1: addr %x", addr[1]);
+    end
 
-    /*always @ (data_in[1]) begin
+    always @ (data_in[1]) begin
         $display("mem1: data_in %x", data_in[1]);
     end
 
@@ -46,9 +52,10 @@ module arm_memory
         $display("mem0: data_in %x", data_in[0]);
     end
 
-    [>always @ (data_out[0]) begin
+    always @ (data_out[0]) begin
         $display("mem0: data_out %x", data_out[0]);
-    end<]
+    end
+
     always @ (data_out[1]) begin
         $display("mem1: data_out %x", data_out[1]);
     end*/

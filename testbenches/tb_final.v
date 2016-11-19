@@ -22,10 +22,13 @@ module tb_final;
     wire halted;
     wire [31:0] mem_addr1, inst_addr1, mem_data_in1;
     wire  mem_write_en1;
-    assign mem_addr1 = mem_addr;
-    assign inst_addr1 = inst_addr;
-    assign mem_data_in1 = mem_data_in;
-    assign mem_write_en1 = mem_write_en;
+
+    always @(*) begin
+        mem_addr = (rst) ? mem_addr : mem_addr1;
+        inst_addr = (rst) ? inst_addr : inst_addr1;
+        mem_data_in = (rst) ? mem_data_in : mem_data_in1;
+        mem_write_en = (rst) ? mem_write_en : mem_write_en;
+    end
 
     arm_memory memauri
     (
@@ -86,8 +89,8 @@ module tb_final;
         end
         else begin
             rst = 0;
-            //if (halted)
-                #1000 $finish;
+            if (halted)
+                #10 $finish;
         end
     end
 
