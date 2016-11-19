@@ -18,7 +18,7 @@ module arm_core
     always @(posedge clk) begin
         if (!rst) begin
             $display("instruction: %x", inst);
-            $display("rn_out: %x, shifter_op: %x", rn_out, shifter_operand);
+            $display("rn_out: %x, shifter_op: %x alu_out: %x", rn_out, shifter_operand, alu_out);
             inst_addr <= pc_out;
             if (inst == 32'he3a000bb)
                 halted <= 1'b1;
@@ -74,6 +74,7 @@ module arm_core
         .clk(clk),
         .reset(rst),
         .rd_we(rd_we),
+        .rd_in(rd_in),
         .write_rd(write_rd),
         .read_rn(read_rn),
         .read_rm(read_rm),
@@ -154,6 +155,7 @@ module arm_core
         .rs_out(rs_out),
         .pc_out(pc_out),
         .cpsr_out(cpsr_out),
+        .alu_out(alu_out),
         // Outputs
         // To register_file:
         .write_rd(write_rd),
@@ -176,7 +178,6 @@ module arm_core
         .shift_imm_shifter_in(shift_imm),
         // To arm_alu:
         .alu_sel(alu_sel),
-        .alu_out(alu_out),
         // To barrel_shifter:
         .barrel_sel(barrel_sel)
     );

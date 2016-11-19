@@ -12,6 +12,7 @@ module arm_decode
     // Outputs of register file:
     input      [31:0] rn_out, rm_out, rs_out,
     input      [31:0] pc_out, cpsr_out,
+    input      [31:0] alu_out,
 
     /*---------- Outputs ------------*/
     // Inputs to register file:
@@ -32,7 +33,6 @@ module arm_decode
     output reg [4:0]  shift_imm_shifter_in,
 
     output reg [3:0]  alu_sel, // wired to ALU
-    output     [31:0] alu_out,
     output reg [3:0]  barrel_sel, // wired to barrel_shifter
 
     // Back to arm_core:
@@ -120,6 +120,7 @@ module arm_decode
                     write_rd <= dcd_rd;
                     rd_we <= 1'b1;
                     cpsr_we <= inst[`S_BIT];
+                    rd_in <= alu_out;
 
                     // For shifter mux input.
                     shift_imm_shifter_in <= dcd_shift_amt;
