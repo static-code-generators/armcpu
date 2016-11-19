@@ -7,11 +7,11 @@ module tb_register_file;
     reg rd_we;
     reg [`WORD_SIZE - 1:0] rd_in;
     reg [`ADDR_WIDTH - 1:0] write_rd;
-    reg [`ADDR_WIDTH - 1:0] read_rn, read_rm;
+    reg [`ADDR_WIDTH - 1:0] read_rn, read_rm, read_rs;
     reg [`WORD_SIZE - 1:0] pc_in, cpsr_in;
     reg pc_we, cpsr_we;
 
-    wire [`WORD_SIZE - 1:0] rn_out, rm_out;
+    wire [`WORD_SIZE - 1:0] rn_out, rm_out, rs_out;
     wire [`WORD_SIZE - 1:0] pc_out, cpsr_out;
     integer i;
 
@@ -69,5 +69,5 @@ module tb_register_file;
             clk, reset, rd_we, write_rd, rd_in, read_rn, rn_out);
     end
 
-    register_file reg_file(clk, reset, rd_we, rd_in, write_rd, read_rn, read_rm, pc_in, cpsr_in, pc_we, cpsr_we, rn_out, rm_out, pc_out, cpsr_out);
+    register_file reg_file(clk, reset, rd_we, rd_in, write_rd, read_rn, read_rm, read_rs, pc_in, cpsr_in, pc_we, cpsr_we, rn_out, rm_out, rs_out, pc_out, cpsr_out);
 endmodule

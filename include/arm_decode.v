@@ -8,16 +8,17 @@ module arm_decode
 (
     input             cond_pass, // wired to output of cond_checker module, only changes outputs if cond_pass is true
     input      [31:0] inst, // input instruction
+
+    // Outputs of register file:
+    input      [31:0] rn_out, rm_out, rs_out,
+    input      [31:0] pc_out, cpsr_out,
+
     /*---------- Outputs ------------*/
     // Inputs to register file:
     output reg [3:0]  write_rd, read_rn, read_rm, read_rs,
     output reg        rd_we, pc_we, cpsr_we,
     output reg [31:0] rd_in, pc_in, cpsr_in, // this line will probably change
     
-    //outputs of register file:
-    output reg [31:0] rn_out, rm_out, rs_out,
-    output reg [31:0] pc_out, cpsr_out,
-
     // Control signals for various modules
     // Inputs to shiftee_mux (all register inputs will be connected to
     // register file, only immediate values connected via decoder):
@@ -106,6 +107,7 @@ module arm_decode
     /*----------- Actual decoding by instruction details ---------*/
 
     always @(*) begin
+        pc_we <= 1'b0;
         if (cond_pass == 1) begin
 
             /*--------------- OP-SPECIFIC DECODING -------------*/
@@ -118,7 +120,6 @@ module arm_decode
                     write_rd <= dcd_rd;
                     rd_we <= 1'b1;
                     cpsr_we <= inst[`S_BIT];
-                    pc_we <= 1'b0;
 
                     // For shifter mux input.
                     shift_imm_shifter_in <= dcd_shift_amt;

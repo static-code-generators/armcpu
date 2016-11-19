@@ -24,7 +24,7 @@ module register_file
     output [WORD_SIZE - 1:0]  pc_out, cpsr_out
 );
     // declaring memory elements
-    reg [WORD_SIZE - 1:0] registers[NUM_REGS - 1:0];
+    reg [WORD_SIZE - 1:0] registers[0:NUM_REGS - 1];
     reg [WORD_SIZE - 1:0] cpsr;
 
     // assigning outputs
@@ -41,10 +41,9 @@ module register_file
             for (i = 0; i < NUM_REGS; i = i + 1)
                 registers[i] <= 0;
             cpsr <= 32'b0;
-            registers[15] <= 32'b0;
-            $display("reg[15]: %d", registers[15]);
         end
         else begin 
+            //$display("reg[15]: %d, pc_out %d", registers[15], pc_out);
             if (rd_we) begin
                 registers[write_rd] <= rd_in;
             end
@@ -52,7 +51,6 @@ module register_file
                 registers[15] <= pc_in;
             end
             if (!pc_we) begin
-                //$display("pc: %d\n", registers[15]);
                 registers[15] <= registers[15] + 4;
             end
             if (cpsr_we) begin

@@ -17,7 +17,7 @@ module arm_core
 
     always @(posedge clk) begin
         if (rst)
-            $display("pc_out: %d", pc_out);
+            //$display("pc_out: %d", pc_out);
         if (!rst) begin
             //$display("pc_out: %d", pc_out);
             inst_addr <= pc_out;
@@ -139,6 +139,11 @@ module arm_core
         // Inputs
         .cond_pass(cond_pass),
         .inst(inst),
+        .rn_out(rn_out),
+        .rm_out(rm_out),
+        .rs_out(rs_out),
+        .pc_out(pc_out),
+        .cpsr_out(cpsr_out),
         // Outputs
         // To register_file:
         .write_rd(write_rd),
@@ -151,11 +156,6 @@ module arm_core
         .rd_in(rd_in),
         .pc_in(pc_in),
         .cpsr_in(cpsr_in),
-        .rn_out(rn_out),
-        .rm_out(rm_out),
-        .rs_out(rs_out),
-        .pc_out(pc_out),
-        .cpsr_out(cpsr_out),
         // To shiftee_mux:
         .shiftee_sel(shiftee_sel),
         .immed_8_shiftee_in(immed_8),
